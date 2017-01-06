@@ -14,8 +14,8 @@ import ReactiveKit
 class GameTests: XCTestCase {
     
     let twoPlayers = [
-        Player(name: "Player 1"),
-        Player(name: "Player 2")]
+        FakePlayer(name: "Player 1"),
+        FakePlayer(name: "Player 2")]
     
     let fakePictures = [
         FakePicture(name: "Cat 1"),
@@ -25,42 +25,64 @@ class GameTests: XCTestCase {
         FakePicture(name: "Cat 5"),
     ]
     
+    let bag = DisposeBag()
+    
     var movesSubject: SafePublishSubject<Move>!
+    var regularGame: Signal<GameState<FakePlayer>, String>!
+    
     
     override func setUp() {
         super.setUp()
         movesSubject = SafePublishSubject<Move>()
+        regularGame = game(players: twoPlayers, pictures: fakePictures, moves: movesSubject)
     }
     
     override func tearDown() {
+        movesSubject = nil
+        regularGame = nil
         
+        bag.dispose()
         super.tearDown()
     }
     
     // MARK: Inits
     
     func testGameRejectsEmptyArrayOfPictures(){
-        let theGame = game(players: twoPlayers, pictures: [Picture](), moves: movesSubject)
+        let theGame = game(players: twoPlayers, pictures: [FakePicture](), moves: movesSubject)
         expect(theGame).to(beNil())
     }
     
     func testGameRejectsEmptyArrayOfPlayers(){
-        let theGame = game(players: [Player](), pictures: [Picture](), moves: movesSubject)
+        let theGame = game(players: [FakePlayer](), pictures: [FakePicture](), moves: movesSubject)
         expect(theGame).to(beNil())
     }
 
     func testGameInitsWithPicturesAndPlayers(){
-        let theGame = game(players: [Player](), pictures: [Picture](), moves: movesSubject)
+        let theGame = game(players: twoPlayers, pictures: fakePictures, moves: movesSubject)
         expect(theGame).toNot(beNil())
     }
     
     
     // MARK: Generates board
     
-//    func testGameGivesValidBoardWithTwoOfEachPicture(){
-////        let game = Game(players: twoPlayers, pictures: fakePictures)
-//    }
+    func testGameGivesValidBoardWithTwoOfEachPicture(){
+        
+        let firstMove = Property<GameState<FakePlayer>?>(nil)
+        
+        regularGame.suppressError(logging: true).bind(to: firstMove).dispose(in: bag)
+        
+        expect(firstMove.value?.board.tiles).to(haveCount(fakePictures.count * 2))
+        
+    }
     
-    
-    
+    func testGameStartsWithValidPlayer(){
+        
+        let firstMove = Property<GameState<FakePlayer>?>(nil)
+        
+        regularGame.suppressError(logging: true).bind(to: firstMove).dispose(in: bag)
+        
+        expect(firstMove.value?.player).to(equal(twoPlayers[0]))
+        
+    }
 }
+

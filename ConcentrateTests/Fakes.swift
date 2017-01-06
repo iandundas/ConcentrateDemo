@@ -18,10 +18,18 @@ import UIKit
  }
  */
 
-struct FakePicture: Picture {
+struct FakePicture: PictureType {
     let name: String
     
     func image(size: CGSize) -> Signal<UIImage, String> {
         return Signal.just(UIImage())
     }
 }
+
+struct FakePlayer: PlayerType {
+    let name: String
+}
+//
+//func ==(a: FakePlayer, b: FakePlayer) -> Bool {
+//    return a.name == b.name
+//}

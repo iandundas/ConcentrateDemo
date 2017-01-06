@@ -22,8 +22,9 @@
 		3C54136D1E1FD09F00EA86B0 /* Nimble.framework in Copy Carthage Dependancies */ = {isa = PBXBuildFile; fileRef = 3C5413691E1FD00D00EA86B0 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3C5413711E1FD32100EA86B0 /* Bond.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C54136F1E1FD32100EA86B0 /* Bond.framework */; };
 		3C5413721E1FD32100EA86B0 /* ReactiveKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C5413701E1FD32100EA86B0 /* ReactiveKit.framework */; };
-		3C5413751E1FD3C000EA86B0 /* FakePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5413741E1FD3C000EA86B0 /* FakePicture.swift */; };
+		3C5413751E1FD3C000EA86B0 /* Fakes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5413741E1FD3C000EA86B0 /* Fakes.swift */; };
 		3C54137A1E1FE5AE00EA86B0 /* Diff.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C5413781E1FE59700EA86B0 /* Diff.framework */; };
+		3C54137C1E1FEEBA00EA86B0 /* PlayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C54137B1E1FEEBA00EA86B0 /* PlayerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,8 +79,9 @@
 		3C5413691E1FD00D00EA86B0 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		3C54136F1E1FD32100EA86B0 /* Bond.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bond.framework; path = Carthage/Build/iOS/Bond.framework; sourceTree = "<group>"; };
 		3C5413701E1FD32100EA86B0 /* ReactiveKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveKit.framework; path = Carthage/Build/iOS/ReactiveKit.framework; sourceTree = "<group>"; };
-		3C5413741E1FD3C000EA86B0 /* FakePicture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakePicture.swift; sourceTree = "<group>"; };
+		3C5413741E1FD3C000EA86B0 /* Fakes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fakes.swift; sourceTree = "<group>"; };
 		3C5413781E1FE59700EA86B0 /* Diff.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Diff.framework; path = Carthage/Build/iOS/Diff.framework; sourceTree = "<group>"; };
+		3C54137B1E1FEEBA00EA86B0 /* PlayerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,9 +152,10 @@
 		3C5413401E1FC31900EA86B0 /* ConcentrateTests */ = {
 			isa = PBXGroup;
 			children = (
-				3C5413731E1FD3A000EA86B0 /* Stubs */,
+				3C5413741E1FD3C000EA86B0 /* Fakes.swift */,
 				3C5413411E1FC31900EA86B0 /* GameTests.swift */,
 				3C5413431E1FC31900EA86B0 /* Info.plist */,
+				3C54137B1E1FEEBA00EA86B0 /* PlayerTests.swift */,
 			);
 			path = ConcentrateTests;
 			sourceTree = "<group>";
@@ -193,14 +196,6 @@
 				3C5413691E1FD00D00EA86B0 /* Nimble.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		3C5413731E1FD3A000EA86B0 /* Stubs */ = {
-			isa = PBXGroup;
-			children = (
-				3C5413741E1FD3C000EA86B0 /* FakePicture.swift */,
-			);
-			name = Stubs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -375,7 +370,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C5413421E1FC31900EA86B0 /* GameTests.swift in Sources */,
-				3C5413751E1FD3C000EA86B0 /* FakePicture.swift in Sources */,
+				3C54137C1E1FEEBA00EA86B0 /* PlayerTests.swift in Sources */,
+				3C5413751E1FD3C000EA86B0 /* Fakes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
