@@ -25,6 +25,12 @@ struct FakePicture: PictureType {
         return Signal.just(UIImage())
     }
 }
+func ==(a: FakePicture, b: FakePicture) -> Bool{
+    return a.name == b.name
+}
+func !=(a: FakePicture, b: FakePicture) -> Bool{
+    return !(a == b)
+}
 
 struct FakePlayer: PlayerType {
     let name: String
