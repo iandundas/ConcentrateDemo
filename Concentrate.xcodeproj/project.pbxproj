@@ -12,8 +12,17 @@
 		3C5413321E1FC31900EA86B0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C5413301E1FC31900EA86B0 /* Main.storyboard */; };
 		3C5413341E1FC31900EA86B0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C5413331E1FC31900EA86B0 /* Assets.xcassets */; };
 		3C5413371E1FC31900EA86B0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C5413351E1FC31900EA86B0 /* LaunchScreen.storyboard */; };
-		3C5413421E1FC31900EA86B0 /* ConcentrateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5413411E1FC31900EA86B0 /* ConcentrateTests.swift */; };
+		3C5413421E1FC31900EA86B0 /* GameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5413411E1FC31900EA86B0 /* GameTests.swift */; };
 		3C54134D1E1FC31900EA86B0 /* ConcentrateUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C54134C1E1FC31900EA86B0 /* ConcentrateUITests.swift */; };
+		3C54135C1E1FC8C700EA86B0 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C54135B1E1FC8C700EA86B0 /* Game.swift */; };
+		3C5413601E1FCC8800EA86B0 /* Numbers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C54135F1E1FCC8800EA86B0 /* Numbers.swift */; };
+		3C5413621E1FCCB300EA86B0 /* Colours.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5413611E1FCCB300EA86B0 /* Colours.swift */; };
+		3C5413641E1FCD3900EA86B0 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5413631E1FCD3900EA86B0 /* Images.swift */; };
+		3C54136B1E1FD05900EA86B0 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C5413691E1FD00D00EA86B0 /* Nimble.framework */; };
+		3C54136D1E1FD09F00EA86B0 /* Nimble.framework in Copy Carthage Dependancies */ = {isa = PBXBuildFile; fileRef = 3C5413691E1FD00D00EA86B0 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3C5413711E1FD32100EA86B0 /* Bond.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C54136F1E1FD32100EA86B0 /* Bond.framework */; };
+		3C5413721E1FD32100EA86B0 /* ReactiveKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C5413701E1FD32100EA86B0 /* ReactiveKit.framework */; };
+		3C5413751E1FD3C000EA86B0 /* FakePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5413741E1FD3C000EA86B0 /* FakePicture.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +42,20 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		3C54136C1E1FD08600EA86B0 /* Copy Carthage Dependancies */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				3C54136D1E1FD09F00EA86B0 /* Nimble.framework in Copy Carthage Dependancies */,
+			);
+			name = "Copy Carthage Dependancies";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		3C5413291E1FC31900EA86B0 /* Concentrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Concentrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C54132C1E1FC31900EA86B0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -42,11 +65,19 @@
 		3C5413361E1FC31900EA86B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3C5413381E1FC31900EA86B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3C54133D1E1FC31900EA86B0 /* ConcentrateTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConcentrateTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3C5413411E1FC31900EA86B0 /* ConcentrateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcentrateTests.swift; sourceTree = "<group>"; };
+		3C5413411E1FC31900EA86B0 /* GameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTests.swift; sourceTree = "<group>"; };
 		3C5413431E1FC31900EA86B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3C5413481E1FC31900EA86B0 /* ConcentrateUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConcentrateUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C54134C1E1FC31900EA86B0 /* ConcentrateUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConcentrateUITests.swift; sourceTree = "<group>"; };
 		3C54134E1E1FC31900EA86B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3C54135B1E1FC8C700EA86B0 /* Game.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Game.swift; path = Model/Game.swift; sourceTree = "<group>"; };
+		3C54135F1E1FCC8800EA86B0 /* Numbers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Numbers.swift; sourceTree = "<group>"; };
+		3C5413611E1FCCB300EA86B0 /* Colours.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colours.swift; sourceTree = "<group>"; };
+		3C5413631E1FCD3900EA86B0 /* Images.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
+		3C5413691E1FD00D00EA86B0 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
+		3C54136F1E1FD32100EA86B0 /* Bond.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bond.framework; path = Carthage/Build/iOS/Bond.framework; sourceTree = "<group>"; };
+		3C5413701E1FD32100EA86B0 /* ReactiveKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveKit.framework; path = Carthage/Build/iOS/ReactiveKit.framework; sourceTree = "<group>"; };
+		3C5413741E1FD3C000EA86B0 /* FakePicture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakePicture.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +85,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C5413721E1FD32100EA86B0 /* ReactiveKit.framework in Frameworks */,
+				3C5413711E1FD32100EA86B0 /* Bond.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C54136B1E1FD05900EA86B0 /* Nimble.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,6 +111,7 @@
 		3C5413201E1FC31900EA86B0 = {
 			isa = PBXGroup;
 			children = (
+				3C5413681E1FD00400EA86B0 /* Frameworks */,
 				3C54132B1E1FC31900EA86B0 /* Concentrate */,
 				3C5413401E1FC31900EA86B0 /* ConcentrateTests */,
 				3C54134B1E1FC31900EA86B0 /* ConcentrateUITests */,
@@ -97,6 +132,8 @@
 		3C54132B1E1FC31900EA86B0 /* Concentrate */ = {
 			isa = PBXGroup;
 			children = (
+				3C54135D1E1FCC6900EA86B0 /* Extensions */,
+				3C54135A1E1FC8AA00EA86B0 /* Model */,
 				3C54132C1E1FC31900EA86B0 /* AppDelegate.swift */,
 				3C54132E1E1FC31900EA86B0 /* ViewController.swift */,
 				3C5413301E1FC31900EA86B0 /* Main.storyboard */,
@@ -110,7 +147,8 @@
 		3C5413401E1FC31900EA86B0 /* ConcentrateTests */ = {
 			isa = PBXGroup;
 			children = (
-				3C5413411E1FC31900EA86B0 /* ConcentrateTests.swift */,
+				3C5413731E1FD3A000EA86B0 /* Stubs */,
+				3C5413411E1FC31900EA86B0 /* GameTests.swift */,
 				3C5413431E1FC31900EA86B0 /* Info.plist */,
 			);
 			path = ConcentrateTests;
@@ -125,6 +163,42 @@
 			path = ConcentrateUITests;
 			sourceTree = "<group>";
 		};
+		3C54135A1E1FC8AA00EA86B0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				3C54135B1E1FC8C700EA86B0 /* Game.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		3C54135D1E1FCC6900EA86B0 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				3C54135F1E1FCC8800EA86B0 /* Numbers.swift */,
+				3C5413611E1FCCB300EA86B0 /* Colours.swift */,
+				3C5413631E1FCD3900EA86B0 /* Images.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
+		3C5413681E1FD00400EA86B0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3C54136F1E1FD32100EA86B0 /* Bond.framework */,
+				3C5413701E1FD32100EA86B0 /* ReactiveKit.framework */,
+				3C5413691E1FD00D00EA86B0 /* Nimble.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3C5413731E1FD3A000EA86B0 /* Stubs */ = {
+			isa = PBXGroup;
+			children = (
+				3C5413741E1FD3C000EA86B0 /* FakePicture.swift */,
+			);
+			name = Stubs;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -135,6 +209,7 @@
 				3C5413251E1FC31900EA86B0 /* Sources */,
 				3C5413261E1FC31900EA86B0 /* Frameworks */,
 				3C5413271E1FC31900EA86B0 /* Resources */,
+				3C54136E1E1FD2F000EA86B0 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -152,6 +227,7 @@
 				3C5413391E1FC31900EA86B0 /* Sources */,
 				3C54133A1E1FC31900EA86B0 /* Frameworks */,
 				3C54133B1E1FC31900EA86B0 /* Resources */,
+				3C54136C1E1FD08600EA86B0 /* Copy Carthage Dependancies */,
 			);
 			buildRules = (
 			);
@@ -257,12 +333,34 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		3C54136E1E1FD2F000EA86B0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/ReactiveKit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Bond.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		3C5413251E1FC31900EA86B0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C5413601E1FCC8800EA86B0 /* Numbers.swift in Sources */,
+				3C5413641E1FCD3900EA86B0 /* Images.swift in Sources */,
+				3C5413621E1FCCB300EA86B0 /* Colours.swift in Sources */,
 				3C54132F1E1FC31900EA86B0 /* ViewController.swift in Sources */,
+				3C54135C1E1FC8C700EA86B0 /* Game.swift in Sources */,
 				3C54132D1E1FC31900EA86B0 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -271,7 +369,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3C5413421E1FC31900EA86B0 /* ConcentrateTests.swift in Sources */,
+				3C5413421E1FC31900EA86B0 /* GameTests.swift in Sources */,
+				3C5413751E1FD3C000EA86B0 /* FakePicture.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,6 +515,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = N8N37QWHHP;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Concentrate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.iandundas.Concentrate;
@@ -429,6 +532,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = N8N37QWHHP;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = Concentrate/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.iandundas.Concentrate;
@@ -443,6 +550,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = N8N37QWHHP;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = ConcentrateTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.iandundas.ConcentrateTests;
@@ -458,6 +569,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = N8N37QWHHP;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = ConcentrateTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.iandundas.ConcentrateTests;
