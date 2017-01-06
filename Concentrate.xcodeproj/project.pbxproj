@@ -23,6 +23,7 @@
 		3C5413711E1FD32100EA86B0 /* Bond.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C54136F1E1FD32100EA86B0 /* Bond.framework */; };
 		3C5413721E1FD32100EA86B0 /* ReactiveKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C5413701E1FD32100EA86B0 /* ReactiveKit.framework */; };
 		3C5413751E1FD3C000EA86B0 /* FakePicture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5413741E1FD3C000EA86B0 /* FakePicture.swift */; };
+		3C54137A1E1FE5AE00EA86B0 /* Diff.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C5413781E1FE59700EA86B0 /* Diff.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 		3C54136F1E1FD32100EA86B0 /* Bond.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bond.framework; path = Carthage/Build/iOS/Bond.framework; sourceTree = "<group>"; };
 		3C5413701E1FD32100EA86B0 /* ReactiveKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveKit.framework; path = Carthage/Build/iOS/ReactiveKit.framework; sourceTree = "<group>"; };
 		3C5413741E1FD3C000EA86B0 /* FakePicture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakePicture.swift; sourceTree = "<group>"; };
+		3C5413781E1FE59700EA86B0 /* Diff.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Diff.framework; path = Carthage/Build/iOS/Diff.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +88,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C5413721E1FD32100EA86B0 /* ReactiveKit.framework in Frameworks */,
+				3C54137A1E1FE5AE00EA86B0 /* Diff.framework in Frameworks */,
 				3C5413711E1FD32100EA86B0 /* Bond.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -184,6 +187,7 @@
 		3C5413681E1FD00400EA86B0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3C5413781E1FE59700EA86B0 /* Diff.framework */,
 				3C54136F1E1FD32100EA86B0 /* Bond.framework */,
 				3C5413701E1FD32100EA86B0 /* ReactiveKit.framework */,
 				3C5413691E1FD00D00EA86B0 /* Nimble.framework */,
@@ -342,6 +346,7 @@
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/ReactiveKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Bond.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Diff.framework",
 			);
 			outputPaths = (
 			);
