@@ -27,7 +27,7 @@ func game<Player: PlayerType, Picture: PictureType>(players: [Player], pictures:
         let initialTiles: [Tile] = initialBoardConfiguration.map { .filled(picture: $0) }
         let initialBoard = Board(tiles: initialTiles)
         previousBoard = initialBoard
-        observer.next(GameState(board: initialBoard, player: currentPlayer))
+        observer.next(.readyForTurn(board: initialBoard, player: currentPlayer))
         
         moves.observeNext(with: { (move) in
             // in the scope of a move, the previousBoard is really the operative board, so "currentBoard".
@@ -41,16 +41,15 @@ func game<Player: PlayerType, Picture: PictureType>(players: [Player], pictures:
                 guard case .filled(let picture) = tile else {observer.failed("Logical error: can't have success on a blank tile"); return}
                 let tiles = currentBoard.tiles.map(replaceMatchingTilesWithBlanks(pictureID: picture.id))
                 let nextBoard = Board(tiles: tiles)
-                let nextState = GameState<Player>(board: nextBoard, player: currentPlayer)
                 previousBoard = nextBoard
-                observer.next(nextState)
+                observer.next(.readyForTurn(board: nextBoard, player: currentPlayer))
                 
             // If move was unsuccessful,
             // - turn moves to the next player
             case .failure:
-                guard let nextPlayer = playerIterator.next() else { fatalError("Fatal Error: could not retrieve the next player"); return}
-                let nextState = GameState<Player>(board: currentBoard, player: nextPlayer)
-                observer.next(nextState)
+                guard let nextPlayer = playerIterator.next() else { fatalError("Fatal Error: could not retrieve the next player"); }
+                currentPlayer = nextPlayer
+                observer.next(.readyForTurn(board: currentBoard, player: nextPlayer))
             }
         }).dispose(in: bag)
         
@@ -60,10 +59,12 @@ func game<Player: PlayerType, Picture: PictureType>(players: [Player], pictures:
     return signal
 }
 
-struct GameState<Player: PlayerType> {
-    let board: Board
-    let player: Player
+enum GameState<Player: PlayerType> {
+    case readyForTurn(board: Board, player: Player)
+    case ended
 }
+
+
 
 protocol PlayerType: Equatable {
     var name: String {get}
