@@ -27,15 +27,23 @@ func game<Player: PlayerType, Picture: PictureType>(players: [Player], pictures:
         let initialTiles: [Tile] = initialBoardConfiguration.map { .filled(picture: $0) }
         let initialBoard = Board(tiles: initialTiles)
         previousBoard = initialBoard
-        observer.next(GameState(board: initialBoard, player: playerIterator.next()!))
+        observer.next(GameState(board: initialBoard, player: currentPlayer))
         
         moves.observeNext(with: { (move) in
-            guard let previousBoard = previousBoard else { observer.failed("Logical error: no previous board configuration found"); return}
-            guard let nextPlayer = playerIterator.next() else { fatalError("Fatal Error: could not retrieve the next player"); return}
+            // in the scope of a move, the previousBoard is really the operative board, so "currentBoard".
+            guard let currentBoard = previousBoard else { observer.failed("Logical error: no previous board configuration found"); return}
             
             switch move {
+            // If move was successful,
+            // - player gets a point
+            // - player gets another go
             case .success(tile: let tile):
-                fatalError()
+                guard case .filled(let picture) = tile else {observer.failed("Logical error: can't have success on a blank tile"); return}
+                let tiles = currentBoard.tiles.map(replaceMatchingTilesWithBlanks(pictureID: picture.id))
+                let nextBoard = Board(tiles: tiles)
+                let nextState = GameState<Player>(board: nextBoard, player: currentPlayer)
+                previousBoard = nextBoard
+                observer.next(nextState)
                 
             // If move was unsuccessful,
             // - turn moves to the next player
@@ -91,9 +99,9 @@ struct Board {
 }
 
 protocol PictureType{
+    var id: String {get}
     func image(size: CGSize) -> Signal<UIImage, String>
 }
-
 
 enum Tile {
     case blank
@@ -103,4 +111,24 @@ enum Tile {
 enum Move {
     case success(tile: Tile)
     case failure
+}
+
+// Use currying to create a filter function:
+func removeTilesWithPictureID(id: String) -> (Tile) -> Bool {
+    return { tile in
+        switch tile {
+        case .blank: return true
+        case let .filled(picture: picture): return picture.id != id
+        }
+    }
+}
+
+
+func replaceMatchingTilesWithBlanks(pictureID: String) -> (Tile) -> Tile {
+    return { tile -> Tile in
+        if case let Tile.filled(picture) = tile, picture.id == pictureID{
+            return Tile.blank
+        }
+        return tile
+    }
 }

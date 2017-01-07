@@ -19,12 +19,12 @@
 		3C5413621E1FCCB300EA86B0 /* Colours.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5413611E1FCCB300EA86B0 /* Colours.swift */; };
 		3C5413641E1FCD3900EA86B0 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5413631E1FCD3900EA86B0 /* Images.swift */; };
 		3C54136B1E1FD05900EA86B0 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C5413691E1FD00D00EA86B0 /* Nimble.framework */; };
-		3C54136D1E1FD09F00EA86B0 /* Nimble.framework in Copy Carthage Dependancies */ = {isa = PBXBuildFile; fileRef = 3C5413691E1FD00D00EA86B0 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3C5413711E1FD32100EA86B0 /* Bond.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C54136F1E1FD32100EA86B0 /* Bond.framework */; };
 		3C5413721E1FD32100EA86B0 /* ReactiveKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C5413701E1FD32100EA86B0 /* ReactiveKit.framework */; };
 		3C5413751E1FD3C000EA86B0 /* Fakes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5413741E1FD3C000EA86B0 /* Fakes.swift */; };
 		3C54137A1E1FE5AE00EA86B0 /* Diff.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C5413781E1FE59700EA86B0 /* Diff.framework */; };
 		3C54137C1E1FEEBA00EA86B0 /* PlayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C54137B1E1FEEBA00EA86B0 /* PlayerTests.swift */; };
+		3C54137F1E21422B00EA86B0 /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3C5413691E1FD00D00EA86B0 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,15 +45,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		3C54136C1E1FD08600EA86B0 /* Copy Carthage Dependancies */ = {
+		3C54137E1E21422400EA86B0 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				3C54136D1E1FD09F00EA86B0 /* Nimble.framework in Copy Carthage Dependancies */,
+				3C54137F1E21422B00EA86B0 /* Nimble.framework in CopyFiles */,
 			);
-			name = "Copy Carthage Dependancies";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -226,7 +225,7 @@
 				3C5413391E1FC31900EA86B0 /* Sources */,
 				3C54133A1E1FC31900EA86B0 /* Frameworks */,
 				3C54133B1E1FC31900EA86B0 /* Resources */,
-				3C54136C1E1FD08600EA86B0 /* Copy Carthage Dependancies */,
+				3C54137E1E21422400EA86B0 /* CopyFiles */,
 			);
 			buildRules = (
 			);

@@ -18,8 +18,9 @@ import UIKit
  }
  */
 
-struct FakePicture: PictureType {
+struct FakePicture: PictureType, Equatable {
     let name: String
+    let id: String = NSUUID().uuidString
     
     func image(size: CGSize) -> Signal<UIImage, String> {
         return Signal.just(UIImage())

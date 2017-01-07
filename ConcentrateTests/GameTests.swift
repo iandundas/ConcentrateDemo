@@ -129,6 +129,47 @@ class GameTests: XCTestCase {
         
         expect(secondMove.value?.player).to(equal(twoPlayers[0]))
     }
+    
+    func testSuccessfulFirstMoveAdvancesGameStateToABoardWithThatTileRemoved(){
+        
+        // Verify First State
+        let firstMove = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).element(at: 0).bind(to: firstMove).dispose(in: bag)
+        
+        expect(firstMove.value?.board.tiles).to(haveCount(fakePictures.count * 2))
+        expect(firstMove.value?.board.tiles.filter(onlyBlankTiles)).to(haveCount(0))
+        
+        // Verify Second State (after 1 move)
+        let secondMove = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).element(at: 1).bind(to: secondMove).dispose(in: bag)
+        
+        moves.next(Move.success(
+            tile: Tile.filled(picture: fakePictures[0])
+        ))
+        
+        // Should keep the same amount of tiles (filled or blank)
+        expect(secondMove.value?.board.tiles).to(haveCount(fakePictures.count * 2))
+        // Should now be one blank tile:
+        expect(secondMove.value?.board.tiles.filter(onlyBlankTiles)).to(haveCount(2))
+        
+        // The remaining filled tiles should not contain the move we made before
+        let remainingTilePictures: [FakePicture]? = secondMove.value?.board.tiles.filter(onlyFilledTiles).flatMap(toFakePicture)
+        expect(remainingTilePictures, file: #file, line: #line).toNot(contain(fakePictures[0]))
+    }
+}
 
+func onlyFilledTiles(tile: Tile) -> Bool {
+    if case .filled(_) = tile {return true}
+    return false
+}
+
+func onlyBlankTiles(tile: Tile) -> Bool {
+    if case .blank = tile {return true}
+    return false
+}
+
+func toFakePicture(tile: Tile) -> FakePicture? {
+    if case let .filled(picture as FakePicture) = tile {return picture}
+    return nil
 }
 
