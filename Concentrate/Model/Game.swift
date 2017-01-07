@@ -12,7 +12,7 @@ import GameplayKit
 
 extension String: Error{}
 
-func game<Player: PlayerType, Picture: PictureType>(players: [Player], pictures: [Picture], moves: SafePublishSubject<Move>) -> Signal<GameState<Player>, String>? {
+func game<Player: PlayerType, Picture: PictureType>(players: [Player], pictures: [Picture], moves: SafePublishSubject<Move<Picture>>) -> Signal<GameState<Player>, String>? {
     guard players.count > 0 && pictures.count > 0 else {return nil}
     
     let playerIterator = players.turnIterator()
@@ -30,16 +30,19 @@ func game<Player: PlayerType, Picture: PictureType>(players: [Player], pictures:
         observer.next(.readyForTurn(board: initialBoard, player: currentPlayer))
         
         moves.observeNext(with: { (move) in
-            // in the scope of a move, the previousBoard is really the operative board, so "currentBoard".
+            // in the scope of a move, the previousBoard is really the current operative board, so "currentBoard".
             guard let currentBoard = previousBoard else { observer.failed("Logical error: no previous board configuration found"); return}
             
             switch move {
             // If move was successful,
             // - player gets a point
             // - player gets another go
-            case .success(tile: let tile):
-                guard case .filled(let picture) = tile else {observer.failed("Logical error: can't have success on a blank tile"); return}
-                let tiles = currentBoard.tiles.map(replaceMatchingTilesWithBlanks(pictureID: picture.id))
+            case .success(picture: let picture):
+                // ensure the picture is still present on the board
+                guard currentBoard.tiles.flatMap(toPicture).contains(where: {$0.id == picture.id}) else {
+                    observer.failed("Logical error: given picture is missing or already completed"); return
+                }
+                let tiles = currentBoard.tiles.map(matchingTilesAsBlanks(pictureID: picture.id))
                 let nextBoard = Board(tiles: tiles)
                 previousBoard = nextBoard
                 observer.next(.readyForTurn(board: nextBoard, player: currentPlayer))
@@ -109,8 +112,8 @@ enum Tile {
     case filled(picture: PictureType)
 }
 
-enum Move {
-    case success(tile: Tile)
+enum Move<Picture: PictureType> {
+    case success(picture: Picture)
     case failure
 }
 
@@ -124,8 +127,12 @@ func removeTilesWithPictureID(id: String) -> (Tile) -> Bool {
     }
 }
 
+func toPicture(tile: Tile) -> PictureType? {
+    guard case let Tile.filled(picture) = tile else {return nil}
+    return picture
+}
 
-func replaceMatchingTilesWithBlanks(pictureID: String) -> (Tile) -> Tile {
+func matchingTilesAsBlanks(pictureID: String) -> (Tile) -> Tile {
     return { tile -> Tile in
         if case let Tile.filled(picture) = tile, picture.id == pictureID{
             return Tile.blank

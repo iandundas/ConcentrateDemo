@@ -25,13 +25,13 @@ class GameTests: XCTestCase {
     
     let bag = DisposeBag()
     
-    var moves: SafePublishSubject<Move>!
+    var moves: SafePublishSubject<Move<FakePicture>>!
     var regularGame: Signal<GameState<FakePlayer>, String>!
     
     
     override func setUp() {
         super.setUp()
-        moves = SafePublishSubject<Move>()
+        moves = SafePublishSubject<Move<FakePicture>>()
         regularGame = game(players: twoPlayers, pictures: fakePictures, moves: moves)!.shareReplay()
         
         // Start the game!
@@ -129,8 +129,7 @@ class GameTests: XCTestCase {
         regularGame.suppressError(logging: true).element(at: 1).bind(to: secondMove).dispose(in: bag)
         
         // First player takes a turn (they succeed), then it's their turn again
-        let completedTile = Tile.filled(picture: fakePictures[0])
-        moves.next(Move.success(tile: completedTile))
+        moves.next(Move.success(picture: fakePictures[0]))
         
         expect(secondMove.value?.player).to(equal(twoPlayers[0]))
     }
@@ -156,7 +155,7 @@ class GameTests: XCTestCase {
         
         print("making second move:")
         // Successful move by player 2:
-        moves.next(Move.success(tile: .filled(picture: fakePictures[0])))
+        moves.next(Move.success(picture: fakePictures[0]))
         
         // Should still be player 2
         expect(thirdMove.value?.player).to(equal(twoPlayers[1]))
@@ -167,9 +166,7 @@ class GameTests: XCTestCase {
         let secondMove = Property<GameState<FakePlayer>?>(nil)
         regularGame.suppressError(logging: true).element(at: 1).bind(to: secondMove).dispose(in: bag)
         
-        moves.next(Move.success(
-            tile: Tile.filled(picture: fakePictures[0])
-        ))
+        moves.next(Move.success( picture: fakePictures[0]))
         
         // Should keep the same amount of tiles (filled or blank)
         expect(secondMove.value?.board?.tiles).to(haveCount(fakePictures.count * 2))
