@@ -15,14 +15,36 @@ extension String: Error{}
 func game<Player: PlayerType, Picture: PictureType>(players: [Player], pictures: [Picture], moves: SafePublishSubject<Move>) -> Signal<GameState<Player>, String>? {
     guard players.count > 0 && pictures.count > 0 else {return nil}
     
+    let playerIterator = players.turnIterator()
+    
     let signal = Signal<GameState<Player>, String> { observer in
         let bag = DisposeBag()
+        var previousBoard: Board? = nil
+        var currentPlayer: Player = playerIterator.next()!
         
+        // initial state:
         let initialBoardConfiguration = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: pictures + pictures) as! [Picture]
         let initialTiles: [Tile] = initialBoardConfiguration.map { .filled(picture: $0) }
         let initialBoard = Board(tiles: initialTiles)
+        previousBoard = initialBoard
+        observer.next(GameState(board: initialBoard, player: playerIterator.next()!))
         
-        observer.next(GameState(board: initialBoard, player: players.first!))
+        moves.observeNext(with: { (move) in
+            guard let previousBoard = previousBoard else { observer.failed("Logical error: no previous board configuration found"); return}
+            guard let nextPlayer = playerIterator.next() else { fatalError("Fatal Error: could not retrieve the next player"); return}
+            
+            switch move {
+            case .success(tile: let tile):
+                fatalError()
+                
+            // If move was unsuccessful,
+            // - turn moves to the next player
+            case .failure:
+                guard let nextPlayer = playerIterator.next() else { fatalError("Fatal Error: could not retrieve the next player"); return}
+                let nextState = GameState<Player>(board: currentBoard, player: nextPlayer)
+                observer.next(nextState)
+            }
+        }).dispose(in: bag)
         
         return bag
     }
@@ -48,6 +70,7 @@ extension Array where Element: PlayerType {
         
         return AnyIterator {
             guard self.count > 0 else {return nil}
+            
             if i >= self.count {
                 i = 0
             }

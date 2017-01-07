@@ -25,18 +25,18 @@ class GameTests: XCTestCase {
     
     let bag = DisposeBag()
     
-    var movesSubject: SafePublishSubject<Move>!
+    var moves: SafePublishSubject<Move>!
     var regularGame: Signal<GameState<FakePlayer>, String>!
     
     
     override func setUp() {
         super.setUp()
-        movesSubject = SafePublishSubject<Move>()
-        regularGame = game(players: twoPlayers, pictures: fakePictures, moves: movesSubject)
+        moves = SafePublishSubject<Move>()
+        regularGame = game(players: twoPlayers, pictures: fakePictures, moves: moves)
     }
     
     override func tearDown() {
-        movesSubject = nil
+        moves = nil
         regularGame = nil
         
         bag.dispose()
@@ -46,17 +46,17 @@ class GameTests: XCTestCase {
     // MARK: Inits
     
     func testGameRejectsEmptyArrayOfPictures(){
-        let theGame = game(players: twoPlayers, pictures: [FakePicture](), moves: movesSubject)
+        let theGame = game(players: twoPlayers, pictures: [FakePicture](), moves: moves)
         expect(theGame).to(beNil())
     }
     
     func testGameRejectsEmptyArrayOfPlayers(){
-        let theGame = game(players: [FakePlayer](), pictures: [FakePicture](), moves: movesSubject)
+        let theGame = game(players: [FakePlayer](), pictures: [FakePicture](), moves: moves)
         expect(theGame).to(beNil())
     }
 
     func testGameInitsWithPicturesAndPlayers(){
-        let theGame = game(players: twoPlayers, pictures: fakePictures, moves: movesSubject)
+        let theGame = game(players: twoPlayers, pictures: fakePictures, moves: moves)
         expect(theGame).toNot(beNil())
     }
     
@@ -65,7 +65,6 @@ class GameTests: XCTestCase {
     func testGameStartsWithValidPlayer(){
         
         let firstMove = Property<GameState<FakePlayer>?>(nil)
-        
         regularGame.suppressError(logging: true).bind(to: firstMove).dispose(in: bag)
         
         expect(firstMove.value?.player).to(equal(twoPlayers[0]))
@@ -75,7 +74,6 @@ class GameTests: XCTestCase {
     func testGameGivesValidInitialBoardWithTwoOfEachPicture(){
         
         let firstMove = Property<GameState<FakePlayer>?>(nil)
-        
         regularGame.suppressError(logging: true).bind(to: firstMove).dispose(in: bag)
         
         // Tiles should be number of pictures * 2
@@ -104,10 +102,33 @@ class GameTests: XCTestCase {
             return picture != self.fakePictures[2]
         }
         expect(tilesMinusPicture2).to(beEmpty())
-        
-        
     }
     
+    
+    // MARK: Moves! 
+    
+    func testFailingFirstMoveAdvancesGameStateToNextPlayer(){
+        
+        let secondMove = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).element(at: 1).bind(to: secondMove).dispose(in: bag)
+        
+        // First player takes a turn (they fail), then it's player twos' turn
+        moves.next(Move.failure)
+        
+        expect(secondMove.value?.player).to(equal(twoPlayers[1]))
+    }
+    
+    func testSuccessfulFirstMoveAdvancesGameStateForSamePlayer(){
+        
+        let secondMove = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).element(at: 1).bind(to: secondMove).dispose(in: bag)
+        
+        // First player takes a turn (they succeed), then it's their turn again
+        let completedTile = Tile.filled(picture: fakePictures[0])
+        moves.next(Move.success(tile: completedTile))
+        
+        expect(secondMove.value?.player).to(equal(twoPlayers[0]))
+    }
 
 }
 
