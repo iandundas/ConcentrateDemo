@@ -44,8 +44,14 @@ func game<Player: PlayerType, Picture: PictureType>(players: [Player], pictures:
                 }
                 let tiles = currentBoard.tiles.map(matchingTilesAsBlanks(pictureID: picture.id))
                 let nextBoard = Board(tiles: tiles)
-                previousBoard = nextBoard
-                observer.next(.readyForTurn(board: nextBoard, player: currentPlayer))
+                
+                if nextBoard.tiles.filter(filled).count > 0 {
+                    previousBoard = nextBoard
+                    observer.next(.readyForTurn(board: nextBoard, player: currentPlayer))
+                }
+                else{
+                    observer.completed(with: .ended)
+                }
                 
             // If move was unsuccessful,
             // - turn moves to the next player
@@ -117,6 +123,8 @@ enum Move<Picture: PictureType> {
     case failure
 }
 
+// MARK: Mapping and Filtering:
+
 // Use currying to create a filter function:
 func removeTilesWithPictureID(id: String) -> (Tile) -> Bool {
     return { tile in
@@ -125,6 +133,11 @@ func removeTilesWithPictureID(id: String) -> (Tile) -> Bool {
         case let .filled(picture: picture): return picture.id != id
         }
     }
+}
+
+func filled(tile: Tile) -> Bool {
+    if case Tile.filled(_) = tile {return true}
+    return false
 }
 
 func toPicture(tile: Tile) -> PictureType? {
@@ -138,5 +151,21 @@ func matchingTilesAsBlanks(pictureID: String) -> (Tile) -> Tile {
             return Tile.blank
         }
         return tile
+    }
+}
+
+// MARK: Utility accessors:
+extension GameState {
+    var board: Board? {
+        if case .readyForTurn(let board, _) = self { return board }
+        return nil
+    }
+    var player: Player? {
+        if case .readyForTurn(_, let player) = self { return player }
+        return nil
+    }
+    var ended: Bool{
+        if case .ended = self { return true }
+        return false
     }
 }

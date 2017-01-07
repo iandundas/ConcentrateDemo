@@ -175,11 +175,39 @@ class GameTests: XCTestCase {
         
         // The remaining filled tiles should not contain the move we made before
         let remainingTilePictures: [FakePicture]? = secondMove.value?.board?.tiles.filter(onlyFilledTiles).flatMap(toFakePicture)
-        expect(remainingTilePictures, file: #file, line: #line).toNot(contain(fakePictures[0]))
+        expect(remainingTilePictures).toNot(contain(fakePictures[0]))
     }
     
     func testMatchingAllTilesEndsTheGame(){
+        moves.next(Move.success( picture: fakePictures[0]))
+        moves.next(Move.success( picture: fakePictures[1]))
+        moves.next(Move.success( picture: fakePictures[2]))
         
+        let lastMove = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).element(at: 3).bind(to: lastMove).dispose(in: bag)
+        
+        let neverMove = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).element(at: 4).bind(to: neverMove).dispose(in: bag)
+        
+        expect(lastMove.value?.ended).to(beTrue())
+        expect(neverMove.value?.ended).to(beNil()) // shouldn't be anything else
+    }
+    
+    
+    func testMatchingAllTilesWithMistakesEndsTheGame(){
+        moves.next(Move.success( picture: fakePictures[0]))
+        moves.next(Move.failure)
+        moves.next(Move.success( picture: fakePictures[1]))
+        moves.next(Move.failure)
+        moves.next(Move.failure)
+        moves.next(Move.failure)
+        moves.next(Move.failure)
+        moves.next(Move.success( picture: fakePictures[2]))
+        
+        let lastMove = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).element(at: 8).bind(to: lastMove).dispose(in: bag)
+        
+        expect(lastMove.value?.ended).to(beTrue())
     }
 }
 
@@ -198,13 +226,4 @@ func toFakePicture(tile: Tile) -> FakePicture? {
     return nil
 }
 
-extension GameState {
-    var board: Board? {
-        if case .readyForTurn(let board, _) = self { return board }
-        return nil
-    }
-    var player: Player? {
-        if case .readyForTurn(_, let player) = self { return player }
-        return nil
-    }
-}
+
