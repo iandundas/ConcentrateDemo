@@ -19,15 +19,18 @@ func game<Player: PlayerType, Picture: PictureType>(players: [Player], pictures:
     
     let signal = Signal<GameState<Player>, String> { observer in
         let bag = DisposeBag()
+        
         var previousBoard: Board? = nil
+        var scoreboard = Scoreboard(players: players)
         var currentPlayer: Player = playerIterator.next()!
+        
         
         // initial state:
         let initialBoardConfiguration = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: pictures + pictures) as! [Picture]
         let initialTiles: [Tile] = initialBoardConfiguration.map { .filled(picture: $0) }
         let initialBoard = Board(tiles: initialTiles)
         previousBoard = initialBoard
-        observer.next(.readyForTurn(board: initialBoard, player: currentPlayer))
+        observer.next(.readyForTurn(board: initialBoard, player: currentPlayer, scoreboard: scoreboard))
         
         moves.observeNext(with: { (move) in
             // in the scope of a move, the previousBoard is really the current operative board, so "currentBoard".
@@ -42,15 +45,18 @@ func game<Player: PlayerType, Picture: PictureType>(players: [Player], pictures:
                 guard currentBoard.tiles.flatMap(toPicture).contains(where: {$0.id == picture.id}) else {
                     observer.failed("Logical error: given picture is missing or already completed"); return
                 }
-                let tiles = currentBoard.tiles.map(matchingTilesAsBlanks(pictureID: picture.id))
-                let nextBoard = Board(tiles: tiles)
+                
+                scoreboard.up(player: currentPlayer)
+                
+                let nextTiles = currentBoard.tiles.map(matchingTilesAsBlanks(pictureID: picture.id))
+                let nextBoard = Board(tiles: nextTiles)
                 
                 if nextBoard.tiles.filter(filled).count > 0 {
                     previousBoard = nextBoard
-                    observer.next(.readyForTurn(board: nextBoard, player: currentPlayer))
+                    observer.next(.readyForTurn(board: nextBoard, player: currentPlayer, scoreboard: scoreboard))
                 }
                 else{
-                    observer.completed(with: .ended)
+                    observer.completed(with: .ended(scoreboard: scoreboard))
                 }
                 
             // If move was unsuccessful,
@@ -58,7 +64,7 @@ func game<Player: PlayerType, Picture: PictureType>(players: [Player], pictures:
             case .failure:
                 guard let nextPlayer = playerIterator.next() else { fatalError("Fatal Error: could not retrieve the next player"); }
                 currentPlayer = nextPlayer
-                observer.next(.readyForTurn(board: currentBoard, player: nextPlayer))
+                observer.next(.readyForTurn(board: currentBoard, player: nextPlayer, scoreboard: scoreboard))
             }
         }).dispose(in: bag)
         
@@ -69,15 +75,40 @@ func game<Player: PlayerType, Picture: PictureType>(players: [Player], pictures:
 }
 
 enum GameState<Player: PlayerType> {
-    case readyForTurn(board: Board, player: Player)
-    case ended
+    case readyForTurn(board: Board, player: Player, scoreboard: Scoreboard<Player>)
+    case ended(scoreboard: Scoreboard<Player>)
 }
 
+struct Scoreboard<Player: PlayerType>{
+    var scores: [Player : Int]
+    
+    init(players: [Player]){
+        scores = players.reduce([Player : Int]()) { (existing, player) -> [Player : Int] in
+            var mut = existing
+            mut.updateValue(0, forKey: player)
+            return mut
+        }
+    }
+    mutating func up(player: Player){
+        guard let existingScore = scores[player] else {return}
+        scores[player] = existingScore + 1
+    }
+    mutating func down(player: Player){
+        guard let existingScore = scores[player], existingScore > 0 else {return}
+        scores[player] = existingScore - 1
+    }
+}
 
-
-protocol PlayerType: Equatable {
+protocol PlayerType: Equatable, Hashable {
     var name: String {get}
 }
+
+extension PlayerType{
+    var hashValue: Int {
+        return name.hashValue
+    }
+}
+
 func ==<Player: PlayerType>(a: Player, b: Player) -> Bool {
     return a.name == b.name
 }
@@ -100,7 +131,7 @@ extension Array where Element: PlayerType {
     }
 }
 
-struct RealPlayer{
+struct RealPlayer: PlayerType{
     let name: String
 }
 
@@ -157,12 +188,18 @@ func matchingTilesAsBlanks(pictureID: String) -> (Tile) -> Tile {
 // MARK: Utility accessors:
 extension GameState {
     var board: Board? {
-        if case .readyForTurn(let board, _) = self { return board }
+        if case .readyForTurn(let board, _, _) = self { return board }
         return nil
     }
     var player: Player? {
-        if case .readyForTurn(_, let player) = self { return player }
+        if case .readyForTurn(_, let player, _) = self { return player }
         return nil
+    }
+    var score: Scoreboard<Player> {
+        switch self{
+        case .readyForTurn(_, _, let scoreboard) : return scoreboard
+        case .ended(let scoreboard): return scoreboard
+        }
     }
     var ended: Bool{
         if case .ended = self { return true }

@@ -69,20 +69,19 @@ class GameTests: XCTestCase {
     // MARK: Generates board
     func testGameStartsWithValidPlayer(){
         
-        let firstMove = Property<GameState<FakePlayer>?>(nil)
-        regularGame.suppressError(logging: true).bind(to: firstMove).dispose(in: bag)
+        let firstState = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).bind(to: firstState).dispose(in: bag)
         
-        expect(firstMove.value?.player).to(equal(twoPlayers[0]))
-        
+        expect(firstState.value?.player).to(equal(twoPlayers[0]))
     }
     
     func testGameGivesValidInitialBoardWithTwoOfEachPicture(){
         
-        let firstMove = Property<GameState<FakePlayer>?>(nil)
-        regularGame.suppressError(logging: true).bind(to: firstMove).dispose(in: bag)
+        let firstState = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).bind(to: firstState).dispose(in: bag)
         
         // Tiles should be number of pictures * 2
-        let tiles = firstMove.value!.board!.tiles
+        let tiles = firstState.value!.board!.tiles
         expect(tiles).to(haveCount(fakePictures.count * 2))
         
         // Strip first picture and check:
@@ -114,67 +113,67 @@ class GameTests: XCTestCase {
     
     func testFailingFirstMoveAdvancesGameStateToNextPlayer(){
         
-        let secondMove = Property<GameState<FakePlayer>?>(nil)
-        regularGame.suppressError(logging: true).element(at: 1).bind(to: secondMove).dispose(in: bag)
+        let secondState = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).element(at: 1).bind(to: secondState).dispose(in: bag)
         
         // First player takes a turn (they fail), then it's player twos' turn
         moves.next(Move.failure)
         
-        expect(secondMove.value?.player).to(equal(twoPlayers[1]))
+        expect(secondState.value?.player).to(equal(twoPlayers[1]))
     }
     
     func testSuccessfulFirstMoveAdvancesGameStateForSamePlayer(){
         
-        let secondMove = Property<GameState<FakePlayer>?>(nil)
-        regularGame.suppressError(logging: true).element(at: 1).bind(to: secondMove).dispose(in: bag)
+        let secondState = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).element(at: 1).bind(to: secondState).dispose(in: bag)
         
         // First player takes a turn (they succeed), then it's their turn again
         moves.next(Move.success(picture: fakePictures[0]))
         
-        expect(secondMove.value?.player).to(equal(twoPlayers[0]))
+        expect(secondState.value?.player).to(equal(twoPlayers[0]))
     }
     
     func testFailingFirstMoveFollowedBySuccessfulMoveIdentifiesCorrectNextPlayer(){
         
-        let firstMove = Property<GameState<FakePlayer>?>(nil)
-        regularGame.suppressError(logging: true).element(at: 0).bind(to: firstMove).dispose(in: bag)
+        let firstState = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).element(at: 0).bind(to: firstState).dispose(in: bag)
         
-        let secondMove = Property<GameState<FakePlayer>?>(nil)
-        regularGame.suppressError(logging: true).element(at: 1).bind(to: secondMove).dispose(in: bag)
+        let secondState = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).element(at: 1).bind(to: secondState).dispose(in: bag)
         
-        let thirdMove = Property<GameState<FakePlayer>?>(nil)
-        regularGame.suppressError(logging: true).element(at: 2).bind(to: thirdMove).dispose(in: bag)
+        let thirdState = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).element(at: 2).bind(to: thirdState).dispose(in: bag)
 
-        expect(firstMove.value?.player).to(equal(twoPlayers[0]))
+        expect(firstState.value?.player).to(equal(twoPlayers[0]))
 
         print("making first move:")
         // First player takes a turn (they fail), then it's player twos' turn
         moves.next(Move.failure)
         
-        expect(secondMove.value?.player).to(equal(twoPlayers[1]))
+        expect(secondState.value?.player).to(equal(twoPlayers[1]))
         
         print("making second move:")
         // Successful move by player 2:
         moves.next(Move.success(picture: fakePictures[0]))
         
         // Should still be player 2
-        expect(thirdMove.value?.player).to(equal(twoPlayers[1]))
+        expect(thirdState.value?.player).to(equal(twoPlayers[1]))
     }
     
     func testSuccessfulFirstMoveAdvancesGameStateToABoardWithThatTileRemoved(){
         // Verify Second State (after 1 move)
-        let secondMove = Property<GameState<FakePlayer>?>(nil)
-        regularGame.suppressError(logging: true).element(at: 1).bind(to: secondMove).dispose(in: bag)
+        let secondState = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).element(at: 1).bind(to: secondState).dispose(in: bag)
         
         moves.next(Move.success( picture: fakePictures[0]))
         
         // Should keep the same amount of tiles (filled or blank)
-        expect(secondMove.value?.board?.tiles).to(haveCount(fakePictures.count * 2))
+        expect(secondState.value?.board?.tiles).to(haveCount(fakePictures.count * 2))
         // Should now be one blank tile:
-        expect(secondMove.value?.board?.tiles.filter(onlyBlankTiles)).to(haveCount(2))
+        expect(secondState.value?.board?.tiles.filter(onlyBlankTiles)).to(haveCount(2))
         
         // The remaining filled tiles should not contain the move we made before
-        let remainingTilePictures: [FakePicture]? = secondMove.value?.board?.tiles.filter(onlyFilledTiles).flatMap(toFakePicture)
+        let remainingTilePictures: [FakePicture]? = secondState.value?.board?.tiles.filter(onlyFilledTiles).flatMap(toFakePicture)
         expect(remainingTilePictures).toNot(contain(fakePictures[0]))
     }
     
@@ -209,7 +208,74 @@ class GameTests: XCTestCase {
         
         expect(lastMove.value?.ended).to(beTrue())
     }
+    
+    // MARK: Scores! 
+    
+    func testGameStartsWithValidScore(){
+        
+        let firstState = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).bind(to: firstState).dispose(in: bag)
+        
+        let expected: [FakePlayer : Int] = [
+            twoPlayers[0]: 0,
+            twoPlayers[1]: 0,
+        ]
+        
+        expect(firstState.value?.score.scores).to(equal(expected))
+    }
+    
+    func testFailingFirstMoveScoreRemainsZeroZero(){
+        let secondState = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).element(at: 1).bind(to: secondState).dispose(in: bag)
+        
+        // First player takes a turn (they fail), then it's player twos' turn
+        moves.next(Move.failure)
+        
+        let expected: [FakePlayer : Int] = [
+            twoPlayers[0]: 0,
+            twoPlayers[1]: 0,
+            ]
+        
+        expect(secondState.value?.score.scores).to(equal(expected))
+    }
+    
+    func testFirstMoveSuccessScore(){
+        let secondState = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).element(at: 1).bind(to: secondState).dispose(in: bag)
+        
+        // First player takes a turn (they fail), then it's player twos' turn
+        moves.next(Move.success(picture: fakePictures[0]))
+        
+        let expected: [FakePlayer : Int] = [
+            twoPlayers[0]: 1,
+            twoPlayers[1]: 0,
+            ]
+        
+        expect(secondState.value?.score.scores).to(equal(expected))
+    }
+    
+    
+    func testFailFirstMoveThenSucceedSecondMoveScore(){
+        let secondState = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).element(at: 1).bind(to: secondState).dispose(in: bag)
+        
+        let thirdState = Property<GameState<FakePlayer>?>(nil)
+        regularGame.suppressError(logging: true).element(at: 2).bind(to: thirdState).dispose(in: bag)
+        
+        // First player takes a turn (they fail), then it's player twos' turn
+        moves.next(Move.failure)
+        moves.next(Move.success(picture: fakePictures[0]))
+        
+        let expected: [FakePlayer : Int] = [
+            twoPlayers[0]: 0,
+            twoPlayers[1]: 1,
+            ]
+        
+        expect(thirdState.value?.score.scores).to(equal(expected))
+    }
 }
+
+// MARK: Mapping and Filtering: 
 
 func onlyFilledTiles(tile: Tile) -> Bool {
     if case .filled(_) = tile {return true}
@@ -226,4 +292,7 @@ func toFakePicture(tile: Tile) -> FakePicture? {
     return nil
 }
 
+//func ==<Player: PlayerType>(a: Dictionary<Player, Int>, b:Dictionary<Player, Int>) -> Bool {
+//    return a == b
+//}
 
