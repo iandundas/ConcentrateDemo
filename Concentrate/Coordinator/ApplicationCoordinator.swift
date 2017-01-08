@@ -16,8 +16,8 @@ class ApplicationCoordinator: NSObject, Coordinator{
     var childCoordinators: [String: Coordinator] = [:]
     
     let window: UIWindow
-    let realm = try! Realm()
-    private let bag = DisposeBag()
+//    let realm = try! Realm()
+//    private let bag = DisposeBag()
     
     init(window: UIWindow){
         self.window = window
