@@ -24,6 +24,9 @@
 		3C54137A1E1FE5AE00EA86B0 /* Diff.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C5413781E1FE59700EA86B0 /* Diff.framework */; };
 		3C54137C1E1FEEBA00EA86B0 /* PlayerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C54137B1E1FEEBA00EA86B0 /* PlayerTests.swift */; };
 		3C54137F1E21422B00EA86B0 /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 3C5413691E1FD00D00EA86B0 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3C5413821E21995A00EA86B0 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5413811E21995A00EA86B0 /* Coordinator.swift */; };
+		3C5413841E21999700EA86B0 /* ApplicationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5413831E21999700EA86B0 /* ApplicationCoordinator.swift */; };
+		3C5413861E219AF500EA86B0 /* PlayCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5413851E219AF500EA86B0 /* PlayCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,7 +63,6 @@
 		3C5413291E1FC31900EA86B0 /* Concentrate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Concentrate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C54132C1E1FC31900EA86B0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3C54132E1E1FC31900EA86B0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		3C5413311E1FC31900EA86B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3C5413331E1FC31900EA86B0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3C5413361E1FC31900EA86B0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3C5413381E1FC31900EA86B0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -80,6 +82,9 @@
 		3C5413741E1FD3C000EA86B0 /* Fakes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fakes.swift; sourceTree = "<group>"; };
 		3C5413781E1FE59700EA86B0 /* Diff.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Diff.framework; path = Carthage/Build/iOS/Diff.framework; sourceTree = "<group>"; };
 		3C54137B1E1FEEBA00EA86B0 /* PlayerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerTests.swift; sourceTree = "<group>"; };
+		3C5413811E21995A00EA86B0 /* Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Coordinator.swift; path = Coordinator/Coordinator.swift; sourceTree = "<group>"; };
+		3C5413831E21999700EA86B0 /* ApplicationCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ApplicationCoordinator.swift; path = Coordinator/ApplicationCoordinator.swift; sourceTree = "<group>"; };
+		3C5413851E219AF500EA86B0 /* PlayCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlayCoordinator.swift; path = Coordinator/PlayCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,11 +140,11 @@
 		3C54132B1E1FC31900EA86B0 /* Concentrate */ = {
 			isa = PBXGroup;
 			children = (
+				3C5413801E21994700EA86B0 /* Coordinator */,
 				3C54135D1E1FCC6900EA86B0 /* Extensions */,
 				3C54135A1E1FC8AA00EA86B0 /* Model */,
 				3C54132C1E1FC31900EA86B0 /* AppDelegate.swift */,
 				3C54132E1E1FC31900EA86B0 /* ViewController.swift */,
-				3C5413301E1FC31900EA86B0 /* Main.storyboard */,
 				3C5413331E1FC31900EA86B0 /* Assets.xcassets */,
 				3C5413351E1FC31900EA86B0 /* LaunchScreen.storyboard */,
 				3C5413381E1FC31900EA86B0 /* Info.plist */,
@@ -194,6 +199,16 @@
 				3C5413691E1FD00D00EA86B0 /* Nimble.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3C5413801E21994700EA86B0 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				3C5413811E21995A00EA86B0 /* Coordinator.swift */,
+				3C5413831E21999700EA86B0 /* ApplicationCoordinator.swift */,
+				3C5413851E219AF500EA86B0 /* PlayCoordinator.swift */,
+			);
+			name = Coordinator;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -339,6 +354,8 @@
 				"$(SRCROOT)/Carthage/Build/iOS/ReactiveKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Bond.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Diff.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Realm.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RealmSwift.framework",
 			);
 			outputPaths = (
 			);
@@ -356,9 +373,12 @@
 				3C5413601E1FCC8800EA86B0 /* Numbers.swift in Sources */,
 				3C5413641E1FCD3900EA86B0 /* Images.swift in Sources */,
 				3C5413621E1FCCB300EA86B0 /* Colours.swift in Sources */,
+				3C5413861E219AF500EA86B0 /* PlayCoordinator.swift in Sources */,
 				3C54132F1E1FC31900EA86B0 /* ViewController.swift in Sources */,
 				3C54135C1E1FC8C700EA86B0 /* Game.swift in Sources */,
 				3C54132D1E1FC31900EA86B0 /* AppDelegate.swift in Sources */,
+				3C5413821E21995A00EA86B0 /* Coordinator.swift in Sources */,
+				3C5413841E21999700EA86B0 /* ApplicationCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -619,6 +639,7 @@
 				3C5413531E1FC31900EA86B0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3C5413541E1FC31900EA86B0 /* Build configuration list for PBXNativeTarget "ConcentrateTests" */ = {
 			isa = XCConfigurationList;
@@ -627,6 +648,7 @@
 				3C5413561E1FC31900EA86B0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3C5413571E1FC31900EA86B0 /* Build configuration list for PBXNativeTarget "ConcentrateUITests" */ = {
 			isa = XCConfigurationList;
@@ -635,6 +657,7 @@
 				3C5413591E1FC31900EA86B0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
