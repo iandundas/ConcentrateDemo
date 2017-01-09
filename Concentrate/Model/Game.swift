@@ -144,10 +144,28 @@ protocol PictureType{
     func image(size: CGSize) -> Signal<UIImage, String>
 }
 
+struct DevPicture: PictureType {
+    let id: String
+    
+    func image(size: CGSize) -> Signal<UIImage, String> {
+        return Signal.just(UIImage())
+    }
+}
+
 enum Tile {
     case blank
     case filled(picture: PictureType)
+    
+    var blank: Bool? {
+        guard case .blank = self else {return false}
+        return true
+    }
+    var picture: PictureType? {
+        guard case let .filled(picture) = self else {return nil}
+        return picture
+    }
 }
+
 
 enum Move<Picture: PictureType> {
     case success(picture: Picture)
