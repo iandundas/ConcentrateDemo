@@ -29,6 +29,9 @@
 		3CA39EA91E225EA600428C38 /* BaseBoundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA39EA81E225EA600428C38 /* BaseBoundViewController.swift */; };
 		3CA39EAF1E22AD1100428C38 /* Turn.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CA39EAE1E22AD1100428C38 /* Turn.storyboard */; };
 		3CA39EB11E22AD1C00428C38 /* GameHost.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CA39EB01E22AD1C00428C38 /* GameHost.storyboard */; };
+		3CA39EB51E23BB7200428C38 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CA39EB31E23BB7200428C38 /* Assets.xcassets */; };
+		3CA39EB71E23BB8200428C38 /* Fireworks.sks in Resources */ = {isa = PBXBuildFile; fileRef = 3CA39EB61E23BB8200428C38 /* Fireworks.sks */; };
+		3CA39EBE1E23BFC500428C38 /* Winner.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CA39EBD1E23BFC500428C38 /* Winner.storyboard */; };
 		3CA39EC91E23ED1900428C38 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA39EC81E23ED1900428C38 /* Networking.swift */; };
 		3CA39ECC1E24185800428C38 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA39ECB1E24185800428C38 /* MainCoordinator.swift */; };
 		3CA39ECE1E24198400428C38 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA39ECD1E24198400428C38 /* CollectionView.swift */; };
@@ -98,6 +101,10 @@
 		3CA39EA81E225EA600428C38 /* BaseBoundViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseBoundViewController.swift; sourceTree = "<group>"; };
 		3CA39EAE1E22AD1100428C38 /* Turn.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Turn.storyboard; path = Flows/Play/Turn.storyboard; sourceTree = "<group>"; };
 		3CA39EB01E22AD1C00428C38 /* GameHost.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = GameHost.storyboard; sourceTree = "<group>"; };
+		3CA39EB31E23BB7200428C38 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3CA39EB61E23BB8200428C38 /* Fireworks.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = Fireworks.sks; path = ../Fireworks.sks; sourceTree = "<group>"; };
+		3CA39EBD1E23BFC500428C38 /* Winner.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Winner.storyboard; sourceTree = "<group>"; };
+		3CA39EC11E23C29400428C38 /* SceneKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SceneKit.framework; path = System/Library/Frameworks/SceneKit.framework; sourceTree = SDKROOT; };
 		3CA39EC81E23ED1900428C38 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
 		3CA39ECB1E24185800428C38 /* MainCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainCoordinator.swift; path = Coordinator/MainCoordinator.swift; sourceTree = "<group>"; };
 		3CA39ECD1E24198400428C38 /* CollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
@@ -141,6 +148,7 @@
 		3C5413201E1FC31900EA86B0 = {
 			isa = PBXGroup;
 			children = (
+				3CA39EB31E23BB7200428C38 /* Assets.xcassets */,
 				3C5413681E1FD00400EA86B0 /* Frameworks */,
 				3C54132B1E1FC31900EA86B0 /* Concentrate */,
 				3C5413401E1FC31900EA86B0 /* ConcentrateTests */,
@@ -216,6 +224,7 @@
 		3C5413681E1FD00400EA86B0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3CA39EC11E23C29400428C38 /* SceneKit.framework */,
 				3C5413781E1FE59700EA86B0 /* Diff.framework */,
 				3C54136F1E1FD32100EA86B0 /* Bond.framework */,
 				3C5413701E1FD32100EA86B0 /* ReactiveKit.framework */,
@@ -244,6 +253,7 @@
 		3CA39EAB1E225EBB00428C38 /* Play */ = {
 			isa = PBXGroup;
 			children = (
+				3CA39EDF1E247E1500428C38 /* Winner */,
 				3C5413851E219AF500EA86B0 /* PlayCoordinator.swift */,
 				3CA39EDE1E24677F00428C38 /* Host */,
 				3CA39EDD1E24677000428C38 /* Turn */,
@@ -306,6 +316,15 @@
 				3CA39EB01E22AD1C00428C38 /* GameHost.storyboard */,
 			);
 			name = Host;
+			sourceTree = "<group>";
+		};
+		3CA39EDF1E247E1500428C38 /* Winner */ = {
+			isa = PBXGroup;
+			children = (
+				3CA39EB61E23BB8200428C38 /* Fireworks.sks */,
+				3CA39EBD1E23BFC500428C38 /* Winner.storyboard */,
+			);
+			name = Winner;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -422,7 +441,10 @@
 			files = (
 				3CA39EB11E22AD1C00428C38 /* GameHost.storyboard in Resources */,
 				3C5413371E1FC31900EA86B0 /* LaunchScreen.storyboard in Resources */,
+				3CA39EB71E23BB8200428C38 /* Fireworks.sks in Resources */,
+				3CA39EBE1E23BFC500428C38 /* Winner.storyboard in Resources */,
 				3C5413341E1FC31900EA86B0 /* Assets.xcassets in Resources */,
+				3CA39EB51E23BB7200428C38 /* Assets.xcassets in Resources */,
 				3CA39EAF1E22AD1100428C38 /* Turn.storyboard in Resources */,
 				3CA39ED21E2419D600428C38 /* SelectPlayer.storyboard in Resources */,
 				3CA39EDA1E243F9600428C38 /* LoadingAssets.storyboard in Resources */,

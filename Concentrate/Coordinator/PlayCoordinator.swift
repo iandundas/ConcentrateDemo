@@ -9,6 +9,7 @@
 import UIKit
 import ReactiveKit
 import Bond
+import SpriteKit
 
 class PlayCoordinator: NSObject, Coordinator{
     
@@ -20,11 +21,23 @@ class PlayCoordinator: NSObject, Coordinator{
     let moves = PublishSubject<Move<DevPicture>, NoError>()
     let thisgame: Signal<GameState<RealPlayer>, String>
     
+    // convenience state: 
+    let currentPlayer = Property<RealPlayer?>(nil)
+    
     private let bag = DisposeBag()
     init(presenter: UINavigationController, players: [RealPlayer], pictures: [DevPicture]){
         self.presenter = presenter
 
         thisgame = game(players: players, pictures: pictures, moves: moves)!.shareReplay()
+        
+        thisgame
+            .map { (gameState) -> RealPlayer? in
+                guard case let .readyForTurn(_, player, _) = gameState else {return nil}
+                return player
+            }.suppressError(logging: false)
+            .ignoreNil()
+            .bind(to: currentPlayer)
+        
         
         thisgame.observe { event in
             print("⚡️ Game Event: \(event)")
@@ -35,46 +48,44 @@ class PlayCoordinator: NSObject, Coordinator{
     func start(withCallback completion: CoordinatorCallback?) {
         
         // Create a Signal of the current Player, and pass it to the GameHost:
-        let currentPlayer: Signal<RealPlayer, NoError> = thisgame
-            .map { (gameState) -> RealPlayer? in
-                guard case let .readyForTurn(_, player, _) = gameState else {return nil}
-                return player
-            }.suppressError(logging: false)
-            .ignoreNil()
+
         
         let gameHostViewController = GameHostViewController.create { (host) -> GameHostViewModel in
-            return GameHostViewModel(currentPlayer: currentPlayer)
+            return GameHostViewModel(currentPlayer: self.currentPlayer.ignoreNil())
         }
         
-        self.thisgame.observe { [weak self] (event: Event<GameState<RealPlayer>, String>) in
+        // On "Next" game events:
+        thisgame.observeNext { [weak self] (gameState: GameState<RealPlayer>) in
             guard let strongSelf = self else {return}
+            guard let board = gameState.board, let player = gameState.player else {return}
             
-            switch event {
-            case .next(let gameState):
-                guard let board = gameState.board, let player = gameState.player else {break}
+            let turnViewController = TurnViewController.create { (viewController) -> TurnViewModel<RealPlayer, DevPicture> in
+                let viewModel = TurnViewModel<RealPlayer, DevPicture>(
+                    actions: viewController.actions, board: board, player: player, scoreboard: gameState.score)
                 
-                let turnViewController = TurnViewController.create { (viewController) -> TurnViewModel<RealPlayer, DevPicture> in
-                    let viewModel = TurnViewModel<RealPlayer, DevPicture>(
-                        actions: viewController.actions, board: board, player: player, scoreboard: gameState.score)
-                    
-                    // pass user moves out to the Game
-                    viewModel.resultOfUserTurn
-                        .bind(to: strongSelf.moves)
-                        .dispose(in: viewController.reactive.bag)
-                    
-                    return viewModel
-                }
+                // pass user moves out to the Game
+                viewModel.resultOfUserTurn
+                    .bind(to: strongSelf.moves)
+                    .dispose(in: viewController.reactive.bag)
                 
-                gameHostViewController.turnViewController = turnViewController
-                
-            case .failed(let error):
-                print("error: \(error)")
-                
-            case .completed:
-                break;
+                return viewModel
             }
+            
+            gameHostViewController.turnViewController = turnViewController
         }.dispose(in: self.bag)
         
+        
+        // When the game is completed:
+        thisgame.observeCompleted { [weak self] in
+            guard let strongSelf = self else {return}
+            
+            let particleTest = ParticleViewController.create { (vc) -> ParticleViewModel in
+                return ParticleViewModel(playerName: strongSelf.currentPlayer.value?.name ?? "")
+            }
+            strongSelf.presenter.pushViewController(particleTest, animated: false)
+        }.dispose(in: self.bag)
+        
+    
         // Ready:
         presenter.viewControllers = [gameHostViewController]
         completion?(self)
@@ -88,7 +99,54 @@ class PlayCoordinator: NSObject, Coordinator{
     }
     
 }
+class ParticleViewModel{
+    let playerName: String
+    
+    init(playerName: String){
+        self.playerName = playerName
+    }
+}
 
+class ParticleViewController: BaseBoundViewController<ParticleViewModel> {
+    public static func create(viewModelFactory: @escaping (ParticleViewController) -> ParticleViewModel) -> ParticleViewController{
+        return create(storyboard: UIStoryboard(name: "Winner", bundle: Bundle.main), viewModelFactory: downcast(closure: viewModelFactory)) as! ParticleViewController
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+    }
+    
+    @IBOutlet var playerName: UILabel!
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        playerName.text = viewModel.playerName
+        
+        let skView = SKView(frame: view.frame)
+        skView.backgroundColor = .clear
+        skView.isOpaque = false
+        view.insertSubview(skView, belowSubview: playerName)
+        
+        let scene = SKScene(size: skView.frame.size)
+        scene.scaleMode = .aspectFill
+        scene.backgroundColor = .clear
+        
+        let path = Bundle.main.path(forResource: "Fireworks", ofType: "sks")
+        let fireworksParticle = NSKeyedUnarchiver.unarchiveObject(withFile: path!) as! SKEmitterNode
+        
+        fireworksParticle.position = playerName.center
+        
+        scene.addChild(fireworksParticle)
+        skView.presentScene(scene)
+        
+        skView.alpha = 0
+        UIView.animate(withDuration: 2) {
+            skView.alpha = 1
+        }
+    }
+}
 
 class GameHostViewModel{
     
@@ -99,6 +157,8 @@ class GameHostViewModel{
         playerName = currentPlayer.map {"It is \($0.name)'s turn!!"}
     }
 }
+
+
 
 class GameHostViewController: BaseBoundViewController<GameHostViewModel> {
     
