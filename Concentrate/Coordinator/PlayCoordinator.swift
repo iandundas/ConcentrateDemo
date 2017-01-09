@@ -14,14 +14,14 @@ class PlayCoordinator: NSObject, Coordinator{
     
     // MARK: Coordinator:
     let identifier = "PlayCoordinator"
-    let presenter: UIViewController
+    let presenter: UINavigationController
     var childCoordinators: [String : Coordinator] = [:]
     
     let moves = PublishSubject<Move<DevPicture>, NoError>()
     let thisgame: Signal<GameState<RealPlayer>, String>
     
     private let bag = DisposeBag()
-    init(presenter: UIViewController){
+    init(presenter: UINavigationController){
         self.presenter = presenter
 
         let players = [
@@ -56,9 +56,6 @@ class PlayCoordinator: NSObject, Coordinator{
         }
         
         presenter.present(gameHost, animated: false) {
-            
-            
-            
             self.thisgame.observe { [weak self] (event: Event<GameState<RealPlayer>, String>) in
                 guard let strongSelf = self else {return}
                 
@@ -110,10 +107,6 @@ class GameHostViewModel{
     init(currentPlayer: Signal<RealPlayer, NoError>){
         self.currentPlayer = currentPlayer
         playerName = currentPlayer.map {$0.name}
-        
-        playerName.observe { (event) in
-            print("\(event)")
-        }
     }
 }
 
@@ -260,7 +253,6 @@ class TurnViewController: BaseBoundViewController<TurnViewModel<RealPlayer, DevP
     
     @IBOutlet var collectionView: UICollectionView!{
         didSet{
-//            collectionView?.delegate = self
             collectionView?.dataSource = self
         }
     }
@@ -287,13 +279,6 @@ class TurnViewController: BaseBoundViewController<TurnViewModel<RealPlayer, DevP
     public func numberOfSections(in collectionView: UICollectionView) -> Int{
         return 1
     }
-    
-    // MARK: UICollectionViewDelegate
-    
-//    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath){
-//        print("did select")
-//    }
-
 }
 
 
@@ -304,15 +289,9 @@ extension TurnViewController {
     
     var actions: Actions {
         return Actions(
-            selectedCell: collectionView.selectedCell
+            selectedCell: collectionView.reactive.selectedCell
         )
     }
 }
 
-extension UICollectionView {
-    var selectedCell: Signal<Int, NoError> {
-        return reactive.delegate.signal(for: #selector(UICollectionViewDelegate.collectionView(_:didSelectItemAt:))) { (subject: PublishSubject<Int, NoError>, _: UICollectionView, indexPath: NSIndexPath) in
-            subject.next(indexPath.row)
-        }
-    }
-}
+

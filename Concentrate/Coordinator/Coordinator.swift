@@ -13,7 +13,7 @@ typealias CoordinatorCallback = (Coordinator) -> Void
 
 protocol Coordinator: NSObjectProtocol{
     var identifier: String {get}
-    var presenter: UIViewController { get }
+    var presenter: UINavigationController { get }
     var childCoordinators: [String: Coordinator] { get set }
     
     /// Tells the coordinator to create its initial view controller and take over the user flow.
