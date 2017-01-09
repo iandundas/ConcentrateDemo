@@ -155,7 +155,17 @@ struct DevPicture: PictureType {
 enum Tile {
     case blank
     case filled(picture: PictureType)
+    
+    var blank: Bool? {
+        guard case .blank = self else {return false}
+        return true
+    }
+    var picture: PictureType? {
+        guard case let .filled(picture) = self else {return nil}
+        return picture
+    }
 }
+
 
 enum Move<Picture: PictureType> {
     case success(picture: Picture)
