@@ -45,13 +45,20 @@ func getJSONDictionary(url: URL) -> Signal<JSONDictionary, String> {
         })
 }
 
-struct PhotoNetworkAsset {
+struct PhotoNetworkAsset: Hashable, Equatable {
     let name: String
     let image_url: URL
+    
+    var hashValue: Int{
+        return image_url.hashValue
+    }
+    
+    static func ==(a: PhotoNetworkAsset, b: PhotoNetworkAsset) -> Bool{
+        return a.image_url.absoluteString == b.image_url.absoluteString
+    }
 }
 
 func fetchPhotoAssets(tag: String) -> Signal<[PhotoNetworkAsset], String> {
-    
     guard let url = URL(string: "https://api.500px.com/v1/photos/search?feature=popular&tag=\(tag)&sort=highest_rating&image_size=3&consumer_key=\(KEY_500PX_CONSUMER)") else {
         return Signal.failed("Unable to form URL");
     }
@@ -75,4 +82,38 @@ func fetchPhotoAssets(tag: String) -> Signal<[PhotoNetworkAsset], String> {
         }
     
     return signal
+}
+
+var imageCache: [PhotoNetworkAsset: UIImage] = [:]
+
+func fetchImage(asset: PhotoNetworkAsset) -> Signal<UIImage, String> {
+    // If image is in the cache already, return it immediately:
+    if let cacheHit = imageCache[asset] {
+        return Signal.just(cacheHit)
+    }
+    else {
+        // Fetch the image:
+        return getData(url: asset.image_url).flatMapLatest { (imageData) -> Signal<UIImage, String> in
+            guard let image = UIImage(data: imageData) else { return Signal.failed("Data was not a valid image") }
+            return Signal.just(image)
+        }
+        // Add it to the cache: 
+        .doOn(next: { (image: UIImage) in
+            imageCache[asset] = image
+        })
+    }
+}
+
+func fetchImages(assets: [PhotoNetworkAsset]) -> Signal<[UIImage], String> {
+
+    let signals:[Signal<UIImage, String>] = assets.map {fetchImage(asset: $0)}
+    let sequenceOfSignals: Signal<Signal<UIImage, String>, NoError> = SafeSignal.sequence(signals)
+    
+    let flattenedSignal: Signal<UIImage, String> = sequenceOfSignals
+        .flatMapMerge { (signal: Signal<UIImage, String>) -> Signal<UIImage, String> in
+            return signal.retry(times: 1)
+        }
+    
+    let collectedResult:Signal<[UIImage], String> = flattenedSignal.collect()
+    return collectedResult
 }
