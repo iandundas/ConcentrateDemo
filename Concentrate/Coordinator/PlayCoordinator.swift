@@ -143,23 +143,21 @@ class TurnViewModel<Player: PlayerType, Picture: PictureType> {
         self.player = player
         self.scoreboard = scoreboard
         
-        let firstTileChoice = actions.selectedCell.map { board.tiles[$0] }.filter(include: filled).element(at: 0)
-        let secondTileChoice = actions.selectedCell.map { board.tiles[$0] }.filter(include: filled).element(at: 1)
+        let tileTaps = actions.selectedCell
+            .map { (index: $0, tile: board.tiles[$0]) } // combine index with Tile
+            .filter {filled(tile: $0.tile)} // filter out .blank Tiles
+            .distinct { $0.index != $1.index } // ignore tap if it was on the same Tile index
+            .map {$0.tile} // only need the tile now
+        
+        let firstTile = tileTaps.element(at: 0)
+        let secondTile = tileTaps.element(at: 1)
         
         // Combine the signals from user's first and second choice,
         // and map to .success or .failure
         // then bind the result to the ViewModel output `resultOfUserTurn`:
-        combineLatest(firstTileChoice, secondTileChoice)
+        combineLatest(firstTile, secondTile)
             .mapTileCombinationToMoveResult()
             .bind(to: self.resultOfUserTurn)
-        
-        combineLatest(firstTileChoice, secondTileChoice).observeNext { (x) in
-            print("Tapped: \(x)")
-        }
-        
-        self.resultOfUserTurn.observeNext { (move) in
-            print("result: \(move)")
-        }
     }
     
     var cellCount: Int {
@@ -207,18 +205,22 @@ class TurnViewModel<Player: PlayerType, Picture: PictureType> {
 }
 
 
+func matchingTiles(tileA: Tile, tileB: Tile) -> Bool {
+    guard let pictureA = tileA.picture, let pictureB = tileB.picture else {return false}
+    let result = pictureA.id == pictureB.id
+    return result
+}
+
+
 extension SignalProtocol where Element == (Tile, Tile), Error == NoError {
     func mapTileCombinationToMoveResult<Picture: PictureType>() -> SafeSignal<Move<Picture>>{
-        return self
-            .filter { (tileA, tileB) -> Bool in
-                guard let pictureA = tileA.picture, let pictureB = tileB.picture else {return false}
-                let result = pictureA.id == pictureB.id
-                return result
-            }.map { (tile,_) -> Picture? in
-                return tile.picture as? Picture
+        
+        return map { (a: Tile, b:Tile) -> Move<Picture> in
+            guard let picture = a.picture as? Picture, matchingTiles(tileA: a, tileB: b) else {
+                return .failure
             }
-            .ignoreNil()
-            .map { Move<Picture>.success(picture: $0) }
+            return .success(picture: picture)
+        }
     }
 }
 

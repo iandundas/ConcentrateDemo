@@ -152,7 +152,7 @@ struct DevPicture: PictureType {
     }
 }
 
-enum Tile {
+enum Tile:Equatable {
     case blank
     case filled(picture: PictureType)
     
@@ -163,6 +163,14 @@ enum Tile {
     var picture: PictureType? {
         guard case let .filled(picture) = self else {return nil}
         return picture
+    }
+    
+    static func ==(a: Tile, b: Tile) -> Bool {
+        switch (a,b){
+        case (.blank, .blank): return true
+        case let (.filled(picA), .filled(picB)): return picA.id == picB.id
+        default: return false
+        }
     }
 }
 
