@@ -37,18 +37,28 @@ class PlayCoordinator: NSObject, Coordinator{
         thisgame = game(players: players, pictures: pictures, moves: moves)!.shareReplay()
         
         thisgame.observe { event in
-            print("Game event: \(event)")
-        }
+            print("⚡️ Game Event: \(event)")
+        }.dispose(in: bag)
     }
     
     /// Tells the coordinator to create its initial view controller and take over the user flow.
     func start(withCallback completion: CoordinatorCallback?) {
         
+        // Create a Signal of the current Player, and pass it to the GameHost:
+        let currentPlayer: Signal<RealPlayer, NoError> = thisgame.map { (gameState) -> RealPlayer? in
+            guard case let .readyForTurn(_, player, _) = gameState else {return nil}
+            return player
+        }.suppressError(logging: false)
+        .ignoreNil()
+        
         let gameHost = GameHostViewController.create { (host) -> GameHostViewModel in
-            return GameHostViewModel()
+            return GameHostViewModel(currentPlayer: currentPlayer)
         }
         
         presenter.present(gameHost, animated: false) {
+            
+            
+            
             self.thisgame.observe { [weak self] (event: Event<GameState<RealPlayer>, String>) in
                 guard let strongSelf = self else {return}
                 
@@ -93,7 +103,19 @@ class PlayCoordinator: NSObject, Coordinator{
 }
 
 
-class GameHostViewModel{}
+class GameHostViewModel{
+    
+    let playerName: SafeSignal<String>
+    private let currentPlayer: Signal<RealPlayer, NoError>
+    init(currentPlayer: Signal<RealPlayer, NoError>){
+        self.currentPlayer = currentPlayer
+        playerName = currentPlayer.map {$0.name}
+        
+        playerName.observe { (event) in
+            print("\(event)")
+        }
+    }
+}
 
 class GameHostViewController: BaseBoundViewController<GameHostViewModel> {
     
@@ -101,6 +123,9 @@ class GameHostViewController: BaseBoundViewController<GameHostViewModel> {
         return create(storyboard: UIStoryboard(name: "GameHost", bundle: Bundle.main), viewModelFactory: downcast(closure: viewModelFactory)) as! GameHostViewController
     }
 
+    @IBOutlet var gameFrame: UIView!
+    @IBOutlet var playerName: UILabel!
+    
     var turnViewController: TurnViewController? = nil{
         didSet{
             // remove any existing old one:
@@ -113,7 +138,7 @@ class GameHostViewController: BaseBoundViewController<GameHostViewModel> {
             if let child = turnViewController{
                 addChildViewController(child)
                 view.addSubview(child.view)
-                child.view.frame = view.frame.insetBy(dx: 20, dy: 20)
+                child.view.frame = gameFrame.frame
                 child.didMove(toParentViewController: self)
             }
         }
@@ -122,6 +147,8 @@ class GameHostViewController: BaseBoundViewController<GameHostViewModel> {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.yellow
+        
+        bind(viewModel.playerName, to: playerName.reactive.text)
     }
 }
 
