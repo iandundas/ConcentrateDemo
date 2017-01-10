@@ -109,17 +109,7 @@ class MainCoordinator: NSObject, Coordinator{
                 }
             }
             .observeNext { [weak self] (players: [RealPlayer], images: [UIImage]) in
-                guard let strongSelf = self else {return}
-
-                let pictures = images.enumerated().map { DevPicture(image: $0.element, id: String($0.offset)) }
-                
-                let modalNavController = UINavigationController()
-                
-                let playCoord = PlayCoordinator(presenter: modalNavController, players: players, pictures: pictures)
-                _ = strongSelf.startChild(coordinator: playCoord) { (coordinator) in
-                    strongSelf.presenter.present(modalNavController, animated: true, completion: nil)
-                }
-                
+                self?.startPlayCoordinator(players: players, images: images)
             }.dispose(in: bag)
     }
     
@@ -145,6 +135,28 @@ class MainCoordinator: NSObject, Coordinator{
         }
     }
     
+    func startPlayCoordinator(players: [RealPlayer], images: [UIImage]){
+        let pictures = images.enumerated().map { DevPicture(image: $0.element, id: String($0.offset)) }
+        
+        let modalNavController = UINavigationController()
+        
+        let playCoord = PlayCoordinator(presenter: modalNavController, players: players, pictures: pictures)
+        
+        _ = self.startChild(coordinator: playCoord) { _ in
+            self.presenter.present(modalNavController, animated: true, completion: {
+                
+                playCoord.shouldDismissCoordinator.observeNext { [weak self, weak playCoord] in
+                    guard let strongSelf = self, let strongCoordinator = playCoord else {return}
+                    
+                    strongSelf.presenter.dismiss(animated: true, completion: {
+                        strongSelf.stopChild(coordinatorWithIdentifier: strongCoordinator.identifier, callback: { (_) in
+                            //
+                        })
+                    })
+                }.dispose(in: self.bag)
+            })
+        }
+    }
     
     func startScoresCoordinator(){
         
