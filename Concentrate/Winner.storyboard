@@ -42,6 +42,7 @@
                             <constraint firstItem="HEL-WJ-qRa" firstAttribute="top" secondItem="b8H-1j-6IX" secondAttribute="bottom" constant="83" id="a1l-gL-d0P"/>
                         </constraints>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <connections>
                         <outlet property="playerName" destination="sEp-k0-P2M" id="Jst-vF-JGK"/>
                     </connections>

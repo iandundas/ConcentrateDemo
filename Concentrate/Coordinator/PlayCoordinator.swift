@@ -10,6 +10,7 @@ import UIKit
 import ReactiveKit
 import Bond
 import SpriteKit
+import RealmSwift
 
 class PlayCoordinator: NSObject, Coordinator{
     
@@ -18,11 +19,14 @@ class PlayCoordinator: NSObject, Coordinator{
     let presenter: UINavigationController
     var childCoordinators: [String : Coordinator] = [:]
     
+    let shouldDismissCoordinator = SafePublishSubject<Void>()
+    
     let moves = PublishSubject<Move<DevPicture>, NoError>()
     let thisgame: Signal<GameState<RealPlayer>, String>
     
     // convenience state: 
-    let currentPlayer = Property<RealPlayer?>(nil)
+    let currentPlayer = ReactiveKit.Property<RealPlayer?>(nil)
+    
     
     private let bag = DisposeBag()
     init(presenter: UINavigationController, players: [RealPlayer], pictures: [DevPicture]){
@@ -79,10 +83,30 @@ class PlayCoordinator: NSObject, Coordinator{
         thisgame.observeCompleted { [weak self] in
             guard let strongSelf = self else {return}
             
-            let particleTest = WinnerViewController.create { (vc) -> WinnerViewModel in
+            let winnerViewController = WinnerViewController.create { (vc) -> WinnerViewModel in
                 return WinnerViewModel(playerName: strongSelf.currentPlayer.value?.name ?? "")
             }
-            strongSelf.presenter.pushViewController(particleTest, animated: false)
+            winnerViewController.actions.tappedToClose.bind(to: strongSelf.shouldDismissCoordinator)
+            
+            strongSelf.presenter.pushViewController(winnerViewController, animated: false)
+        }.dispose(in: self.bag)
+        
+        
+        // The last state of the game (.ended), we want to save the scores from:
+        thisgame.last().observeNext { (lastGameState) in
+            guard case .ended(let scoreboard) = lastGameState else {return}
+            
+            let winner = scoreboard.scores.sorted(by: { (a: (key: RealPlayer, value: Int), b:(key: RealPlayer, value: Int)) -> Bool in
+                return a.value > b.value
+            }).first
+            
+            if let winner = winner {
+                let realm = try! Realm()
+                try! realm.write {
+                    realm.add(Score(value: ["playerName": winner.key.name, "score": winner.value]))
+                }
+            }
+            
         }.dispose(in: self.bag)
         
     
@@ -112,19 +136,40 @@ class WinnerViewController: BaseBoundViewController<WinnerViewModel> {
         return create(storyboard: UIStoryboard(name: "Winner", bundle: Bundle.main), viewModelFactory: downcast(closure: viewModelFactory)) as! WinnerViewController
     }
     
+    @IBOutlet var playerName: UILabel!
+    
+    let tappedToClose = SafePublishSubject<Void>()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        navigationController?.navigationBar.isTranslucent = false
+        navigationItem.hidesBackButton = true
     }
-    
-    @IBOutlet var playerName: UILabel!
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         playerName.text = viewModel.playerName
         
-        let skView = SKView(frame: view.frame)
+        let particles = addParticleView()
+        
+        particles.alpha = 0
+        UIView.animate(withDuration: 2, animations: {
+            particles.alpha = 1
+        }, completion: {_ in
+            self.addCloseButton()
+        })
+    }
+    
+    private func addCloseButton(){
+        let leftBarButtonItem = UIBarButtonItem(title: "Close", style: .plain, target: nil, action: nil)
+        bind(leftBarButtonItem.reactive.tap, to: tappedToClose)
+        navigationItem.leftBarButtonItem = leftBarButtonItem
+    }
+    
+    private func addParticleView() -> SKView{
+ 
+        let skView = SKView(frame: self.view.frame)
         skView.backgroundColor = .clear
         skView.isOpaque = false
         view.insertSubview(skView, belowSubview: playerName)
@@ -136,17 +181,29 @@ class WinnerViewController: BaseBoundViewController<WinnerViewModel> {
         let path = Bundle.main.path(forResource: "Fireworks", ofType: "sks")
         let fireworksParticle = NSKeyedUnarchiver.unarchiveObject(withFile: path!) as! SKEmitterNode
         
-        fireworksParticle.position = playerName.center
+        var position = playerName.center
+        position.y = position.y + 64
+        fireworksParticle.position = position
         
         scene.addChild(fireworksParticle)
         skView.presentScene(scene)
         
-        skView.alpha = 0
-        UIView.animate(withDuration: 2) {
-            skView.alpha = 1
-        }
+        return skView
     }
 }
+extension WinnerViewController {
+    struct Actions {
+        public let tappedToClose: SafeSignal<Void>
+    }
+    
+    var actions: Actions {
+        return Actions(
+            tappedToClose: tappedToClose.toSignal()
+        )
+    }
+}
+
+
 
 class GameHostViewModel{
     
@@ -190,6 +247,7 @@ class GameHostViewController: BaseBoundViewController<GameHostViewModel> {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = "Concentrate"
     }
     
     override func viewDidLayoutSubviews() {

@@ -83,6 +83,7 @@ class SelectPlayerViewController: BaseBoundViewController<SelectPlayerViewModel<
     }
     
     let tappedGo = SafePublishSubject<Void>()
+    let tappedHighScores = SafePublishSubject<Void>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -92,6 +93,10 @@ class SelectPlayerViewController: BaseBoundViewController<SelectPlayerViewModel<
         bind(viewModel.goEnabled, to: rightBarButtonItem.reactive.isEnabled)
         bind(rightBarButtonItem.reactive.tap, to: tappedGo)
         navigationItem.rightBarButtonItem = rightBarButtonItem
+        
+        let leftBarButtonItem = UIBarButtonItem(title: "Scores", style: .plain, target: nil, action: nil)
+        bind(leftBarButtonItem.reactive.tap, to: tappedHighScores)
+        navigationItem.leftBarButtonItem = leftBarButtonItem
     }
     
     override func bindTo(viewModel: SelectPlayerViewModel<RealPlayer>) {
@@ -136,12 +141,14 @@ extension SelectPlayerViewController{
     struct Actions {
         public let selectedRow: SafeSignal<IndexPath>
         public let tappedGo: SafeSignal<Void>
+        public let tappedScores: SafeSignal<Void>
     }
     
     var actions: Actions {
         return Actions(
             selectedRow: tableView.reactive.selectedRow,
-            tappedGo: tappedGo.toSignal()
+            tappedGo: tappedGo.toSignal(),
+            tappedScores: tappedHighScores.toSignal()
         )
     }
 }
