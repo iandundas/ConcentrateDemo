@@ -81,22 +81,29 @@ class PlayCoordinator: NSObject, Coordinator{
         
         // The last state of the game (.ended), we want to save the scores from:
         thisgame.last().observeNext { [weak self] (lastGameState) in
-            guard let strongSelf = self else {return}
+            guard let strongSelf = self, let realm = try? Realm() else {return}
             guard case .ended(let scoreboard) = lastGameState else {return}
             
-            let winner = scoreboard.scores.sorted(by: { (a: (key: RealPlayer, value: Int), b:(key: RealPlayer, value: Int)) -> Bool in
+            let sortedScores = scoreboard.scores.sorted(by: { (a: (key: RealPlayer, value: Int), b:(key: RealPlayer, value: Int)) -> Bool in
                 return a.value > b.value
-            }).first
+            })
+            guard let firstWinner = sortedScores.first else {return}
             
-            if let winner = winner {
-                let realm = try! Realm()
+            // Was it a draw?
+            if sortedScores.count > 1, sortedScores[1].value == firstWinner.value{
+                let secondWinner = sortedScores[1]
                 try! realm.write {
-                    realm.add(Score(value: ["playerName": winner.key.name, "score": winner.value]))
+                    realm.add(Score(value: ["playerName": firstWinner.key.name, "score": firstWinner.value]))
+                    realm.add(Score(value: ["playerName": secondWinner.key.name, "score": secondWinner.value]))
                 }
-                
-                strongSelf.pushWinner(winner: winner.key)
+                strongSelf.pushWinner(winners: [firstWinner.key, secondWinner.key])
             }
-            
+            else{
+                try! realm.write {
+                    realm.add(Score(value: ["playerName": firstWinner.key.name, "score": firstWinner.value]))
+                }
+                strongSelf.pushWinner(winners: [firstWinner.key])
+            }
         }.dispose(in: self.bag)
         
     
@@ -112,10 +119,11 @@ class PlayCoordinator: NSObject, Coordinator{
         }
     }
     
-    func pushWinner(winner: RealPlayer){
-        let winnerViewController = WinnerViewController.create { (vc) -> WinnerViewModel in
-            return WinnerViewModel(playerName: winner.name)
+    func pushWinner(winners: [RealPlayer]){
+        let winnerViewController = WinnerViewController.create { (vc) -> WinnerViewModel<RealPlayer> in
+            return WinnerViewModel<RealPlayer>(players: winners)
         }
+        
         winnerViewController.actions.tappedToClose.bind(to: shouldDismissCoordinator)
         
         presenter.pushViewController(winnerViewController, animated: false)
