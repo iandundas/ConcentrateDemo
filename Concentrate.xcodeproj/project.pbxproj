@@ -26,6 +26,16 @@
 		3C5413821E21995A00EA86B0 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5413811E21995A00EA86B0 /* Coordinator.swift */; };
 		3C5413841E21999700EA86B0 /* ApplicationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5413831E21999700EA86B0 /* ApplicationCoordinator.swift */; };
 		3C5413861E219AF500EA86B0 /* PlayCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5413851E219AF500EA86B0 /* PlayCoordinator.swift */; };
+		3C84AB481E24E64400F596F6 /* WinnerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C84AB471E24E64400F596F6 /* WinnerViewController.swift */; };
+		3C84AB4A1E24E67F00F596F6 /* GameHostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C84AB491E24E67F00F596F6 /* GameHostViewController.swift */; };
+		3C84AB4C1E24E69A00F596F6 /* TurnViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C84AB4B1E24E69A00F596F6 /* TurnViewController.swift */; };
+		3C84AB4E1E24E6DA00F596F6 /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C84AB4D1E24E6DA00F596F6 /* Tile.swift */; };
+		3C84AB501E24E72800F596F6 /* ReactiveKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C84AB4F1E24E72800F596F6 /* ReactiveKit.swift */; };
+		3C84AB521E24E74100F596F6 /* Scoreboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C84AB511E24E74100F596F6 /* Scoreboard.swift */; };
+		3C84AB541E24E75600F596F6 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C84AB531E24E75600F596F6 /* Player.swift */; };
+		3C84AB561E24E77300F596F6 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C84AB551E24E77300F596F6 /* Board.swift */; };
+		3C84AB581E24E78700F596F6 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C84AB571E24E78700F596F6 /* Move.swift */; };
+		3C84AB5A1E24E79C00F596F6 /* Picture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C84AB591E24E79C00F596F6 /* Picture.swift */; };
 		3CA39EA91E225EA600428C38 /* BaseBoundViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA39EA81E225EA600428C38 /* BaseBoundViewController.swift */; };
 		3CA39EAF1E22AD1100428C38 /* Turn.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CA39EAE1E22AD1100428C38 /* Turn.storyboard */; };
 		3CA39EB11E22AD1C00428C38 /* GameHost.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CA39EB01E22AD1C00428C38 /* GameHost.storyboard */; };
@@ -103,6 +113,16 @@
 		3C5413811E21995A00EA86B0 /* Coordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Coordinator.swift; path = Coordinator/Coordinator.swift; sourceTree = "<group>"; };
 		3C5413831E21999700EA86B0 /* ApplicationCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ApplicationCoordinator.swift; path = Coordinator/ApplicationCoordinator.swift; sourceTree = "<group>"; };
 		3C5413851E219AF500EA86B0 /* PlayCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlayCoordinator.swift; path = Coordinator/PlayCoordinator.swift; sourceTree = "<group>"; };
+		3C84AB471E24E64400F596F6 /* WinnerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WinnerViewController.swift; sourceTree = "<group>"; };
+		3C84AB491E24E67F00F596F6 /* GameHostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameHostViewController.swift; sourceTree = "<group>"; };
+		3C84AB4B1E24E69A00F596F6 /* TurnViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TurnViewController.swift; sourceTree = "<group>"; };
+		3C84AB4D1E24E6DA00F596F6 /* Tile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
+		3C84AB4F1E24E72800F596F6 /* ReactiveKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReactiveKit.swift; sourceTree = "<group>"; };
+		3C84AB511E24E74100F596F6 /* Scoreboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scoreboard.swift; sourceTree = "<group>"; };
+		3C84AB531E24E75600F596F6 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		3C84AB551E24E77300F596F6 /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
+		3C84AB571E24E78700F596F6 /* Move.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
+		3C84AB591E24E79C00F596F6 /* Picture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Picture.swift; sourceTree = "<group>"; };
 		3CA39EA81E225EA600428C38 /* BaseBoundViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseBoundViewController.swift; sourceTree = "<group>"; };
 		3CA39EAE1E22AD1100428C38 /* Turn.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Turn.storyboard; path = Flows/Play/Turn.storyboard; sourceTree = "<group>"; };
 		3CA39EB01E22AD1C00428C38 /* GameHost.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = GameHost.storyboard; sourceTree = "<group>"; };
@@ -216,6 +236,12 @@
 			children = (
 				3C54135B1E1FC8C700EA86B0 /* Game.swift */,
 				3CA39EE71E24CAF800428C38 /* Score.swift */,
+				3C84AB4D1E24E6DA00F596F6 /* Tile.swift */,
+				3C84AB511E24E74100F596F6 /* Scoreboard.swift */,
+				3C84AB531E24E75600F596F6 /* Player.swift */,
+				3C84AB551E24E77300F596F6 /* Board.swift */,
+				3C84AB571E24E78700F596F6 /* Move.swift */,
+				3C84AB591E24E79C00F596F6 /* Picture.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -228,6 +254,7 @@
 				3C5413631E1FCD3900EA86B0 /* Images.swift */,
 				3CA39ECD1E24198400428C38 /* CollectionView.swift */,
 				3CA39ED41E241C2800428C38 /* TableView.swift */,
+				3C84AB4F1E24E72800F596F6 /* ReactiveKit.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -244,11 +271,21 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		3C84AB461E24E62900F596F6 /* High Scores */ = {
+			isa = PBXGroup;
+			children = (
+				3CA39EE31E24C9B400428C38 /* HighScoresViewController.swift */,
+				3CA39EE51E24CA1600428C38 /* HighScores.storyboard */,
+			);
+			name = "High Scores";
+			sourceTree = "<group>";
+		};
 		3CA39EAA1E225EB300428C38 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
-				3CA39EE21E24C93A00428C38 /* Scores */,
 				3C5413831E21999700EA86B0 /* ApplicationCoordinator.swift */,
+				3CA39EA81E225EA600428C38 /* BaseBoundViewController.swift */,
+				3CA39EE21E24C93A00428C38 /* Scores */,
 				3CA39ECA1E24177600428C38 /* Main */,
 				3CA39EAB1E225EBB00428C38 /* Play */,
 			);
@@ -258,9 +295,9 @@
 		3CA39EAB1E225EBB00428C38 /* Play */ = {
 			isa = PBXGroup;
 			children = (
-				3CA39EDF1E247E1500428C38 /* Winner */,
 				3C5413851E219AF500EA86B0 /* PlayCoordinator.swift */,
-				3CA39EDE1E24677F00428C38 /* Host */,
+				3CA39EDF1E247E1500428C38 /* Winner */,
+				3CA39EDE1E24677F00428C38 /* Game Host */,
 				3CA39EDD1E24677000428C38 /* Turn */,
 			);
 			name = Play;
@@ -271,7 +308,6 @@
 			children = (
 				3C54132C1E1FC31900EA86B0 /* AppDelegate.swift */,
 				3C5413331E1FC31900EA86B0 /* Assets.xcassets */,
-				3CA39EA81E225EA600428C38 /* BaseBoundViewController.swift */,
 				3C5413381E1FC31900EA86B0 /* Info.plist */,
 				3C5413351E1FC31900EA86B0 /* LaunchScreen.storyboard */,
 			);
@@ -281,9 +317,9 @@
 		3CA39ECA1E24177600428C38 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				3CA39ECB1E24185800428C38 /* MainCoordinator.swift */,
 				3CA39ED81E243F7400428C38 /* LoadingAssets */,
 				3CA39ED31E241A8F00428C38 /* Select Player */,
-				3CA39ECB1E24185800428C38 /* MainCoordinator.swift */,
 			);
 			name = Main;
 			sourceTree = "<group>";
@@ -311,16 +347,18 @@
 			children = (
 				3CA39EAE1E22AD1100428C38 /* Turn.storyboard */,
 				3CA39EDB1E24655B00428C38 /* TileCell.swift */,
+				3C84AB4B1E24E69A00F596F6 /* TurnViewController.swift */,
 			);
 			name = Turn;
 			sourceTree = "<group>";
 		};
-		3CA39EDE1E24677F00428C38 /* Host */ = {
+		3CA39EDE1E24677F00428C38 /* Game Host */ = {
 			isa = PBXGroup;
 			children = (
 				3CA39EB01E22AD1C00428C38 /* GameHost.storyboard */,
+				3C84AB491E24E67F00F596F6 /* GameHostViewController.swift */,
 			);
-			name = Host;
+			name = "Game Host";
 			sourceTree = "<group>";
 		};
 		3CA39EDF1E247E1500428C38 /* Winner */ = {
@@ -328,6 +366,7 @@
 			children = (
 				3CA39EB61E23BB8200428C38 /* Fireworks.sks */,
 				3CA39EBD1E23BFC500428C38 /* Winner.storyboard */,
+				3C84AB471E24E64400F596F6 /* WinnerViewController.swift */,
 			);
 			name = Winner;
 			sourceTree = "<group>";
@@ -336,8 +375,7 @@
 			isa = PBXGroup;
 			children = (
 				3CA39EE01E24C93300428C38 /* ScoresCoordinator.swift */,
-				3CA39EE31E24C9B400428C38 /* HighScoresViewController.swift */,
-				3CA39EE51E24CA1600428C38 /* HighScores.storyboard */,
+				3C84AB461E24E62900F596F6 /* High Scores */,
 			);
 			name = Scores;
 			sourceTree = "<group>";
@@ -512,15 +550,24 @@
 				3CA39EA91E225EA600428C38 /* BaseBoundViewController.swift in Sources */,
 				3CA39EC91E23ED1900428C38 /* Networking.swift in Sources */,
 				3CA39ED01E2419C900428C38 /* SelectPlayerViewController.swift in Sources */,
+				3C84AB4E1E24E6DA00F596F6 /* Tile.swift in Sources */,
 				3CA39ED51E241C2800428C38 /* TableView.swift in Sources */,
 				3CA39ED71E243F7100428C38 /* LoadingAssetsViewController.swift in Sources */,
+				3C84AB5A1E24E79C00F596F6 /* Picture.swift in Sources */,
 				3C5413601E1FCC8800EA86B0 /* Numbers.swift in Sources */,
 				3CA39EE11E24C93300428C38 /* ScoresCoordinator.swift in Sources */,
 				3C5413641E1FCD3900EA86B0 /* Images.swift in Sources */,
+				3C84AB521E24E74100F596F6 /* Scoreboard.swift in Sources */,
+				3C84AB581E24E78700F596F6 /* Move.swift in Sources */,
+				3C84AB501E24E72800F596F6 /* ReactiveKit.swift in Sources */,
 				3CA39EDC1E24655B00428C38 /* TileCell.swift in Sources */,
 				3CA39EE41E24C9B400428C38 /* HighScoresViewController.swift in Sources */,
 				3C5413621E1FCCB300EA86B0 /* Colours.swift in Sources */,
+				3C84AB481E24E64400F596F6 /* WinnerViewController.swift in Sources */,
+				3C84AB4A1E24E67F00F596F6 /* GameHostViewController.swift in Sources */,
 				3CA39ECC1E24185800428C38 /* MainCoordinator.swift in Sources */,
+				3C84AB4C1E24E69A00F596F6 /* TurnViewController.swift in Sources */,
+				3C84AB561E24E77300F596F6 /* Board.swift in Sources */,
 				3CA39ECE1E24198400428C38 /* CollectionView.swift in Sources */,
 				3CA39EE81E24CAF800428C38 /* Score.swift in Sources */,
 				3C5413861E219AF500EA86B0 /* PlayCoordinator.swift in Sources */,
@@ -528,6 +575,7 @@
 				3C54132D1E1FC31900EA86B0 /* AppDelegate.swift in Sources */,
 				3C5413821E21995A00EA86B0 /* Coordinator.swift in Sources */,
 				3C5413841E21999700EA86B0 /* ApplicationCoordinator.swift in Sources */,
+				3C84AB541E24E75600F596F6 /* Player.swift in Sources */,
 				3CA39EEA1E24D25F00428C38 /* Style.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
