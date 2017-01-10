@@ -190,6 +190,7 @@ class GameHostViewController: BaseBoundViewController<GameHostViewModel> {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = "Concentrate"
     }
     
     override func viewDidLayoutSubviews() {

@@ -26,6 +26,8 @@ class ApplicationCoordinator: NSObject, Coordinator{
         window.rootViewController = presenter
         window.makeKeyAndVisible()
         
+        applyStyle()
+        
         DispatchQueue.main.async {
             let mainFlow = MainCoordinator(presenter: self.presenter)
             _ = self.startChild(coordinator: mainFlow) { (mainFlow) in

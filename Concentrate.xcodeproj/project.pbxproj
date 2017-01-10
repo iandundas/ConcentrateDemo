@@ -41,6 +41,11 @@
 		3CA39ED71E243F7100428C38 /* LoadingAssetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA39ED61E243F7100428C38 /* LoadingAssetsViewController.swift */; };
 		3CA39EDA1E243F9600428C38 /* LoadingAssets.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CA39ED91E243F9600428C38 /* LoadingAssets.storyboard */; };
 		3CA39EDC1E24655B00428C38 /* TileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA39EDB1E24655B00428C38 /* TileCell.swift */; };
+		3CA39EE11E24C93300428C38 /* ScoresCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA39EE01E24C93300428C38 /* ScoresCoordinator.swift */; };
+		3CA39EE41E24C9B400428C38 /* HighScoresViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA39EE31E24C9B400428C38 /* HighScoresViewController.swift */; };
+		3CA39EE61E24CA1600428C38 /* HighScores.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CA39EE51E24CA1600428C38 /* HighScores.storyboard */; };
+		3CA39EE81E24CAF800428C38 /* Score.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA39EE71E24CAF800428C38 /* Score.swift */; };
+		3CA39EEA1E24D25F00428C38 /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA39EE91E24D25F00428C38 /* Style.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -114,6 +119,11 @@
 		3CA39ED61E243F7100428C38 /* LoadingAssetsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingAssetsViewController.swift; sourceTree = "<group>"; };
 		3CA39ED91E243F9600428C38 /* LoadingAssets.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LoadingAssets.storyboard; sourceTree = "<group>"; };
 		3CA39EDB1E24655B00428C38 /* TileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TileCell.swift; sourceTree = "<group>"; };
+		3CA39EE01E24C93300428C38 /* ScoresCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScoresCoordinator.swift; path = Coordinator/ScoresCoordinator.swift; sourceTree = "<group>"; };
+		3CA39EE31E24C9B400428C38 /* HighScoresViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HighScoresViewController.swift; sourceTree = "<group>"; };
+		3CA39EE51E24CA1600428C38 /* HighScores.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = HighScores.storyboard; sourceTree = "<group>"; };
+		3CA39EE71E24CAF800428C38 /* Score.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Score.swift; sourceTree = "<group>"; };
+		3CA39EE91E24D25F00428C38 /* Style.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Style.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,9 +184,9 @@
 				3C5413811E21995A00EA86B0 /* Coordinator.swift */,
 				3CA39EC61E23EADA00428C38 /* Extras */,
 				3CA39EAA1E225EB300428C38 /* Flows */,
-				3C5413801E21994700EA86B0 /* Coordinators */,
 				3C54135D1E1FCC6900EA86B0 /* Extensions */,
 				3C54135A1E1FC8AA00EA86B0 /* Model */,
+				3CA39EE91E24D25F00428C38 /* Style.swift */,
 			);
 			path = Concentrate;
 			sourceTree = "<group>";
@@ -205,6 +215,7 @@
 			isa = PBXGroup;
 			children = (
 				3C54135B1E1FC8C700EA86B0 /* Game.swift */,
+				3CA39EE71E24CAF800428C38 /* Score.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -233,16 +244,10 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		3C5413801E21994700EA86B0 /* Coordinators */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Coordinators;
-			sourceTree = "<group>";
-		};
 		3CA39EAA1E225EB300428C38 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
+				3CA39EE21E24C93A00428C38 /* Scores */,
 				3C5413831E21999700EA86B0 /* ApplicationCoordinator.swift */,
 				3CA39ECA1E24177600428C38 /* Main */,
 				3CA39EAB1E225EBB00428C38 /* Play */,
@@ -325,6 +330,16 @@
 				3CA39EBD1E23BFC500428C38 /* Winner.storyboard */,
 			);
 			name = Winner;
+			sourceTree = "<group>";
+		};
+		3CA39EE21E24C93A00428C38 /* Scores */ = {
+			isa = PBXGroup;
+			children = (
+				3CA39EE01E24C93300428C38 /* ScoresCoordinator.swift */,
+				3CA39EE31E24C9B400428C38 /* HighScoresViewController.swift */,
+				3CA39EE51E24CA1600428C38 /* HighScores.storyboard */,
+			);
+			name = Scores;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -442,6 +457,7 @@
 				3CA39EB11E22AD1C00428C38 /* GameHost.storyboard in Resources */,
 				3C5413371E1FC31900EA86B0 /* LaunchScreen.storyboard in Resources */,
 				3CA39EB71E23BB8200428C38 /* Fireworks.sks in Resources */,
+				3CA39EE61E24CA1600428C38 /* HighScores.storyboard in Resources */,
 				3CA39EBE1E23BFC500428C38 /* Winner.storyboard in Resources */,
 				3C5413341E1FC31900EA86B0 /* Assets.xcassets in Resources */,
 				3CA39EB51E23BB7200428C38 /* Assets.xcassets in Resources */,
@@ -499,16 +515,20 @@
 				3CA39ED51E241C2800428C38 /* TableView.swift in Sources */,
 				3CA39ED71E243F7100428C38 /* LoadingAssetsViewController.swift in Sources */,
 				3C5413601E1FCC8800EA86B0 /* Numbers.swift in Sources */,
+				3CA39EE11E24C93300428C38 /* ScoresCoordinator.swift in Sources */,
 				3C5413641E1FCD3900EA86B0 /* Images.swift in Sources */,
 				3CA39EDC1E24655B00428C38 /* TileCell.swift in Sources */,
+				3CA39EE41E24C9B400428C38 /* HighScoresViewController.swift in Sources */,
 				3C5413621E1FCCB300EA86B0 /* Colours.swift in Sources */,
 				3CA39ECC1E24185800428C38 /* MainCoordinator.swift in Sources */,
 				3CA39ECE1E24198400428C38 /* CollectionView.swift in Sources */,
+				3CA39EE81E24CAF800428C38 /* Score.swift in Sources */,
 				3C5413861E219AF500EA86B0 /* PlayCoordinator.swift in Sources */,
 				3C54135C1E1FC8C700EA86B0 /* Game.swift in Sources */,
 				3C54132D1E1FC31900EA86B0 /* AppDelegate.swift in Sources */,
 				3C5413821E21995A00EA86B0 /* Coordinator.swift in Sources */,
 				3C5413841E21999700EA86B0 /* ApplicationCoordinator.swift in Sources */,
+				3CA39EEA1E24D25F00428C38 /* Style.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

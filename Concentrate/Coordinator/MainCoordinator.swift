@@ -28,7 +28,9 @@ class MainCoordinator: NSObject, Coordinator{
         RealPlayer(name: "😻"),
     ]
     
+    // Triggers for actions on screen:
     let playersWishingToPlayGame = SafePublishSubject<[RealPlayer]>()
+    let requestedToViewHighScores = SafePublishSubject<Void>()
     
     private let bag = DisposeBag()
     init(presenter: UINavigationController){
@@ -36,6 +38,11 @@ class MainCoordinator: NSObject, Coordinator{
         super.init()
         
         presenter.setNavigationBarHidden(false, animated: false)
+        
+        requestedToViewHighScores.observeNext { [weak self] in
+            self?.startScoresCoordinator()
+        }.dispose(in: bag)
+        
         
         let waitForAssetLoading: (Int) -> SafeSignal<[UIImage]> = { [weak self] imageCount in
             guard let strongSelf = self else {return Signal.never()}
@@ -120,6 +127,8 @@ class MainCoordinator: NSObject, Coordinator{
     func start(withCallback completion: CoordinatorCallback?) {
         
         let selectPlayer = SelectPlayerViewController.create { (viewController) -> SelectPlayerViewModel<RealPlayer> in
+            viewController.actions.tappedScores.bind(to: self.requestedToViewHighScores)
+            
             let viewModel = SelectPlayerViewModel(actions: viewController.actions, players: self.demoPlayers)
             viewModel.didChoosePlayers.bind(to: self.playersWishingToPlayGame)
             return viewModel
@@ -134,6 +143,32 @@ class MainCoordinator: NSObject, Coordinator{
         presenter.dismiss(animated: true){
             completion?(self)
         }
+    }
+    
+    
+    func startScoresCoordinator(){
+        
+        let childNav = UINavigationController()
+        let coordinator = ScoresCoordinator(presenter: childNav)
+        
+        _ = startChild(coordinator: coordinator) { _ in
+            self.presenter.present(childNav, animated: true, completion: {
+                
+                coordinator.shouldDismissCoordinator.observeNext { [weak self, weak coordinator] in
+                    guard let strongSelf = self, let strongCoordinator = coordinator else {return}
+                    
+                    strongSelf.presenter.dismiss(animated: true, completion: {
+                        strongSelf.stopChild(coordinatorWithIdentifier: strongCoordinator.identifier, callback: { (_) in
+                            //
+                        })
+                    })
+                }.dispose(in: self.bag)
+            })
+        }
+
+        
+        
+        
     }
     
 }
