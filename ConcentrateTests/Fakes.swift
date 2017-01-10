@@ -12,23 +12,21 @@ import UIKit
 
 @testable import Concentrate
 
-/* 
- protocol Picture{
-     func image(size: CGSize) -> Signal<UIImage, String>
- }
- */
-
 struct FakePicture: PictureType, Equatable {
     let name: String
     let id: String = NSUUID().uuidString
-    
+    var loadedImage: UIImage{
+        return UIImage() // i.e. fake
+    }
     func image(size: CGSize) -> Signal<UIImage, String> {
-        return Signal.just(UIImage())
+        return Signal.just(loadedImage)
     }
 }
+
 func ==(a: FakePicture, b: FakePicture) -> Bool{
     return a.name == b.name
 }
+
 func !=(a: FakePicture, b: FakePicture) -> Bool{
     return !(a == b)
 }
@@ -36,7 +34,4 @@ func !=(a: FakePicture, b: FakePicture) -> Bool{
 struct FakePlayer: PlayerType {
     let name: String
 }
-//
-//func ==(a: FakePlayer, b: FakePlayer) -> Bool {
-//    return a.name == b.name
-//}
+
