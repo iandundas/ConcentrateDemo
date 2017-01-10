@@ -10,7 +10,11 @@ import UIKit
 import ReactiveKit
 import GameplayKit
 
-extension String: Error{}
+
+enum GameState<Player: PlayerType> {
+    case readyForTurn(board: Board, player: Player, scoreboard: Scoreboard<Player>)
+    case ended(scoreboard: Scoreboard<Player>)
+}
 
 func game<Player: PlayerType, Picture: PictureType>(players: [Player], pictures: [Picture], moves: SafePublishSubject<Move<Picture>>) -> Signal<GameState<Player>, String>? {
     guard players.count > 0 && pictures.count > 0 else {return nil}
@@ -56,7 +60,8 @@ func game<Player: PlayerType, Picture: PictureType>(players: [Player], pictures:
                     observer.next(.readyForTurn(board: nextBoard, player: currentPlayer, scoreboard: scoreboard))
                 }
                 else{
-                    observer.completed(with: .ended(scoreboard: scoreboard))
+                    observer.next(.ended(scoreboard: scoreboard))
+                    observer.completed()
                 }
                 
             // If move was unsuccessful,
@@ -74,84 +79,33 @@ func game<Player: PlayerType, Picture: PictureType>(players: [Player], pictures:
     return signal
 }
 
-enum GameState<Player: PlayerType> {
-    case readyForTurn(board: Board, player: Player, scoreboard: Scoreboard<Player>)
-    case ended(scoreboard: Scoreboard<Player>)
-}
-
-struct Scoreboard<Player: PlayerType>{
-    var scores: [Player : Int]
-    
-    init(players: [Player]){
-        scores = players.reduce([Player : Int]()) { (existing, player) -> [Player : Int] in
-            var mut = existing
-            mut.updateValue(0, forKey: player)
-            return mut
-        }
-    }
-    mutating func up(player: Player){
-        guard let existingScore = scores[player] else {return}
-        scores[player] = existingScore + 1
-    }
-    mutating func down(player: Player){
-        guard let existingScore = scores[player], existingScore > 0 else {return}
-        scores[player] = existingScore - 1
-    }
-}
-
-protocol PlayerType: Equatable, Hashable {
-    var name: String {get}
-}
-
-extension PlayerType{
-    var hashValue: Int {
-        return name.hashValue
-    }
-}
-
-func ==<Player: PlayerType>(a: Player, b: Player) -> Bool {
-    return a.name == b.name
-}
-
-extension Array where Element: PlayerType {
-    func turnIterator()->AnyIterator<Element> {
-        var i: Int = 0
-        
-        return AnyIterator {
-            guard self.count > 0 else {return nil}
-            
-            if i >= self.count {
-                i = 0
-            }
-            
-            let returnable = self[i]
-            i = i + 1
-            return returnable
-        }
-    }
-}
-
-struct RealPlayer: PlayerType{
-    let name: String
-}
-
-struct Board {
-    let tiles: [Tile]
-}
-
-protocol PictureType{
-    var id: String {get}
-    func image(size: CGSize) -> Signal<UIImage, String>
-}
-
-enum Tile {
-    case blank
-    case filled(picture: PictureType)
-}
 
 enum Move<Picture: PictureType> {
     case success(picture: Picture)
     case failure
+}
+
+
+// MARK: Utility accessors:
+extension GameState {
+    var board: Board? {
+        if case .readyForTurn(let board, _, _) = self { return board }
+        return nil
+    }
+    var player: Player? {
+        if case .readyForTurn(_, let player, _) = self { return player }
+        return nil
+    }
+    var score: Scoreboard<Player> {
+        switch self{
+        case .readyForTurn(_, _, let scoreboard) : return scoreboard
+        case .ended(let scoreboard): return scoreboard
+        }
+    }
+    var ended: Bool{
+        if case .ended = self { return true }
+        return false
+    }
 }
 
 // MARK: Mapping and Filtering:
@@ -185,24 +139,3 @@ func matchingTilesAsBlanks(pictureID: String) -> (Tile) -> Tile {
     }
 }
 
-// MARK: Utility accessors:
-extension GameState {
-    var board: Board? {
-        if case .readyForTurn(let board, _, _) = self { return board }
-        return nil
-    }
-    var player: Player? {
-        if case .readyForTurn(_, let player, _) = self { return player }
-        return nil
-    }
-    var score: Scoreboard<Player> {
-        switch self{
-        case .readyForTurn(_, _, let scoreboard) : return scoreboard
-        case .ended(let scoreboard): return scoreboard
-        }
-    }
-    var ended: Bool{
-        if case .ended = self { return true }
-        return false
-    }
-}

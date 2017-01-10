@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="B7y-W1-XA3">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Game Host View Controller-->
+        <scene sceneID="oGq-2R-Zmd">
+            <objects>
+                <viewController id="B7y-W1-XA3" customClass="GameHostViewController" customModule="Concentrate" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="h61-L0-JRc"/>
+                        <viewControllerLayoutGuide type="bottom" id="ZTm-WY-LnK"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="jAP-FW-gWz">
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aCy-1g-I9a" userLabel="Border">
+                                <rect key="frame" x="8" y="76.5" width="359" height="518.5"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="(Game goes here)" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Un-HY-B7q">
+                                        <rect key="frame" x="95" y="203" width="137" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.85882352939999995" green="0.0" blue="0.066666666669999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rw7-RD-qPr">
+                                <rect key="frame" x="24" y="14" width="327" height="55"/>
+                                <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="40"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="aCy-1g-I9a" firstAttribute="top" secondItem="Rw7-RD-qPr" secondAttribute="bottom" constant="8" id="0qe-dZ-wXl"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Rw7-RD-qPr" secondAttribute="trailing" constant="8" id="6fy-An-aMf"/>
+                            <constraint firstItem="Rw7-RD-qPr" firstAttribute="top" secondItem="h61-L0-JRc" secondAttribute="bottom" constant="14" id="VFb-Zd-nDD"/>
+                            <constraint firstItem="Rw7-RD-qPr" firstAttribute="leading" secondItem="jAP-FW-gWz" secondAttribute="leadingMargin" constant="8" id="iop-In-16L"/>
+                            <constraint firstItem="aCy-1g-I9a" firstAttribute="leading" secondItem="jAP-FW-gWz" secondAttribute="leading" constant="8" id="jhp-7b-q9d"/>
+                            <constraint firstAttribute="trailing" secondItem="aCy-1g-I9a" secondAttribute="trailing" constant="8" id="v86-6f-LnE"/>
+                            <constraint firstItem="aCy-1g-I9a" firstAttribute="bottom" secondItem="ZTm-WY-LnK" secondAttribute="top" constant="-8" id="yJ0-0J-qk3"/>
+                        </constraints>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="gameFrame" destination="aCy-1g-I9a" id="JnV-Hj-2My"/>
+                        <outlet property="playerName" destination="Rw7-RD-qPr" id="gFN-uG-hac"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Wqg-Rp-wV3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="152.80000000000001" y="-224.4377811094453"/>
+        </scene>
+    </scenes>
+</document>
