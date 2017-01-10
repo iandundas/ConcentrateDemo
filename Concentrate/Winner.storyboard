@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Particle View Controller-->
+        <!--Winner View Controller-->
         <scene sceneID="fIE-BQ-8Kq">
             <objects>
-                <viewController id="kVC-mZ-RHp" customClass="ParticleViewController" customModule="Concentrate" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="kVC-mZ-RHp" customClass="WinnerViewController" customModule="Concentrate" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="b8H-1j-6IX"/>
                         <viewControllerLayoutGuide type="bottom" id="9Jm-oL-JeY"/>

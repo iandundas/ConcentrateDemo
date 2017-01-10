@@ -13,7 +13,11 @@ class TileCell: UICollectionViewCell {
     @IBOutlet var pictureMask: UIView!
     var revealed: Bool = false {
         didSet{
-            pictureMask.alpha = 0
+            if revealed {
+                pictureMask.alpha = 0
+            } else{
+                pictureMask.alpha = 1
+            }
         }
     }
 }

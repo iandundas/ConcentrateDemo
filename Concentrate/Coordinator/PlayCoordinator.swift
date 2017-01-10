@@ -79,8 +79,8 @@ class PlayCoordinator: NSObject, Coordinator{
         thisgame.observeCompleted { [weak self] in
             guard let strongSelf = self else {return}
             
-            let particleTest = ParticleViewController.create { (vc) -> ParticleViewModel in
-                return ParticleViewModel(playerName: strongSelf.currentPlayer.value?.name ?? "")
+            let particleTest = WinnerViewController.create { (vc) -> WinnerViewModel in
+                return WinnerViewModel(playerName: strongSelf.currentPlayer.value?.name ?? "")
             }
             strongSelf.presenter.pushViewController(particleTest, animated: false)
         }.dispose(in: self.bag)
@@ -99,7 +99,7 @@ class PlayCoordinator: NSObject, Coordinator{
     }
     
 }
-class ParticleViewModel{
+class WinnerViewModel{
     let playerName: String
     
     init(playerName: String){
@@ -107,9 +107,9 @@ class ParticleViewModel{
     }
 }
 
-class ParticleViewController: BaseBoundViewController<ParticleViewModel> {
-    public static func create(viewModelFactory: @escaping (ParticleViewController) -> ParticleViewModel) -> ParticleViewController{
-        return create(storyboard: UIStoryboard(name: "Winner", bundle: Bundle.main), viewModelFactory: downcast(closure: viewModelFactory)) as! ParticleViewController
+class WinnerViewController: BaseBoundViewController<WinnerViewModel> {
+    public static func create(viewModelFactory: @escaping (WinnerViewController) -> WinnerViewModel) -> WinnerViewController{
+        return create(storyboard: UIStoryboard(name: "Winner", bundle: Bundle.main), viewModelFactory: downcast(closure: viewModelFactory)) as! WinnerViewController
     }
     
     override func viewDidLoad() {
@@ -334,6 +334,7 @@ class TurnViewController: BaseBoundViewController<TurnViewModel<RealPlayer, DevP
     // MARK: UICollectionViewDelegate:
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? TileCell else {return}
+        guard cell.revealed == false else {return}
         
         UIView.animate(withDuration: viewModel.RevealAnimationDuration / 2) {
             cell.transform = cell.transform.scaledBy(x: 1.2, y: 1.2)
@@ -353,6 +354,7 @@ class TurnViewController: BaseBoundViewController<TurnViewModel<RealPlayer, DevP
         
         if let picture = viewModel.image(cellID: indexPath.row){
             cell.pictureImageView.image = picture
+            cell.revealed = false
         }
         else{
             cell.isHidden = true
