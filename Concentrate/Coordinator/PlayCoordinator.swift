@@ -10,6 +10,7 @@ import UIKit
 import ReactiveKit
 import Bond
 import SpriteKit
+import RealmSwift
 
 class PlayCoordinator: NSObject, Coordinator{
     
@@ -24,7 +25,8 @@ class PlayCoordinator: NSObject, Coordinator{
     let thisgame: Signal<GameState<RealPlayer>, String>
     
     // convenience state: 
-    let currentPlayer = Property<RealPlayer?>(nil)
+    let currentPlayer = ReactiveKit.Property<RealPlayer?>(nil)
+    
     
     private let bag = DisposeBag()
     init(presenter: UINavigationController, players: [RealPlayer], pictures: [DevPicture]){
@@ -89,6 +91,24 @@ class PlayCoordinator: NSObject, Coordinator{
             strongSelf.presenter.pushViewController(winnerViewController, animated: false)
         }.dispose(in: self.bag)
         
+        
+        // The last state of the game (.ended), we want to save the scores from:
+        thisgame.last().observeNext { (lastGameState) in
+            guard case .ended(let scoreboard) = lastGameState else {return}
+            
+            let winner = scoreboard.scores.sorted(by: { (a: (key: RealPlayer, value: Int), b:(key: RealPlayer, value: Int)) -> Bool in
+                return a.value > b.value
+            }).first
+            
+            if let winner = winner {
+                let realm = try! Realm()
+                try! realm.write {
+                    realm.add(Score(value: ["playerName": winner.key.name, "score": winner.value]))
+                }
+            }
+            
+        }.dispose(in: self.bag)
+        
     
         // Ready:
         presenter.viewControllers = [gameHostViewController]
@@ -134,7 +154,7 @@ class WinnerViewController: BaseBoundViewController<WinnerViewModel> {
         let particles = addParticleView()
         
         particles.alpha = 0
-        UIView.animate(withDuration: 3, animations: {
+        UIView.animate(withDuration: 2, animations: {
             particles.alpha = 1
         }, completion: {_ in
             self.addCloseButton()

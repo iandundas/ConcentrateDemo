@@ -56,7 +56,8 @@ func game<Player: PlayerType, Picture: PictureType>(players: [Player], pictures:
                     observer.next(.readyForTurn(board: nextBoard, player: currentPlayer, scoreboard: scoreboard))
                 }
                 else{
-                    observer.completed(with: .ended(scoreboard: scoreboard))
+                    observer.next(.ended(scoreboard: scoreboard))
+                    observer.completed()
                 }
                 
             // If move was unsuccessful,

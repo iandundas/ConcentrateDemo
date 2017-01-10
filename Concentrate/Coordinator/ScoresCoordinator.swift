@@ -29,11 +29,6 @@ class ScoresCoordinator: NSObject, Coordinator{
         
     /// Tells the coordinator to create its initial view controller and take over the user flow.
     func start(withCallback completion: CoordinatorCallback?) {
-    
-        try! realm.write {
-            realm.add(Score(value: ["playerName": "The player", "score": 123]))
-            realm.add(Score(value: ["playerName": "Another", "score": 321]))
-        }
         
         let highScoresViewController = HighScoresViewController.create { (viewController) -> HighScoresViewModel in
             let viewModel = HighScoresViewModel(realm: self.realm)
