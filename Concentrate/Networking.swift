@@ -58,8 +58,8 @@ struct PhotoNetworkAsset: Hashable, Equatable {
     }
 }
 
-func fetchPhotoAssets(tag: String) -> Signal<[PhotoNetworkAsset], String> {
-    guard let url = URL(string: "https://api.500px.com/v1/photos/search?feature=popular&tag=\(tag)&sort=highest_rating&image_size=3&consumer_key=\(KEY_500PX_CONSUMER)") else {
+func fetchPhotoAssets(tag: String, count: Int) -> Signal<[PhotoNetworkAsset], String> {
+    guard let url = URL(string: "https://api.500px.com/v1/photos/search?feature=popular&tag=\(tag)&sort=highest_rating&image_size=3&rpp=\(count)&consumer_key=\(KEY_500PX_CONSUMER)") else {
         return Signal.failed("Unable to form URL");
     }
  

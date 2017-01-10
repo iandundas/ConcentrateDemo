@@ -31,13 +31,7 @@ class ApplicationCoordinator: NSObject, Coordinator{
             _ = self.startChild(coordinator: mainFlow) { (mainFlow) in
                 //
             }
-
         }
-        
-        //        let play = PlayCoordinator(presenter: presenter)
-        //        _ = startChild(coordinator: play) { (playCoordinator) in
-        //            //
-        //        }
     }
     
     /// Tells the coordinator that it is done and that it should rewind the view controller state to where it was before `start` was called.

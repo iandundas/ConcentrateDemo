@@ -11,10 +11,12 @@ import ReactiveKit
 import Bond
 
 class SelectPlayerViewModel<Player: PlayerType> {
-    let selectedRows: Property<[Int : Bool]>
-    private let selectedRowsSink: Signal<[Int : Bool], NoError>
+    let didChoosePlayers: SafeSignal<[Player]>
     
     let goEnabled: SafeSignal<Bool>
+    
+    let selectedRows: Property<[Int : Bool]>
+    private let selectedRowsSink: Signal<[Int : Bool], NoError>
     
     private let players: [Player]
     private let actions: SelectPlayerViewController.Actions
@@ -43,16 +45,14 @@ class SelectPlayerViewModel<Player: PlayerType> {
             return selectedRows.count
         }).map {$0 > 0}
         
-        self.actions.tappedGo.with(latestFrom: selectedRows).map {_, rows -> [Player] in
-            let selectedPlayers = players.enumerated()
-                .filter {rows[$0.offset] ?? false} // Match players whos rows were selected
-                .map {_, player in player } // strip index, return Player
-            return selectedPlayers
-        }.observeNext { (players) in
-            print("Players: \(players)")
-        }
-        
-        
+        self.didChoosePlayers = actions.tappedGo
+            .with(latestFrom: selectedRows)
+            .map {_, rows -> [Player] in
+                let selectedPlayers = players.enumerated()
+                    .filter {rows[$0.offset] ?? false} // Match players whos rows were selected
+                    .map {_, player in player } // strip index, return Player
+                return selectedPlayers
+            }
     }
     
     var rowCount: Int {

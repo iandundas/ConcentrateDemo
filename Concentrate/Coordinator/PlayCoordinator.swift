@@ -21,19 +21,9 @@ class PlayCoordinator: NSObject, Coordinator{
     let thisgame: Signal<GameState<RealPlayer>, String>
     
     private let bag = DisposeBag()
-    init(presenter: UINavigationController){
+    init(presenter: UINavigationController, players: [RealPlayer], pictures: [DevPicture]){
         self.presenter = presenter
 
-        let players = [
-            RealPlayer(name: "Player 1"),
-            RealPlayer(name: "Player 2")
-        ]
-        let pictures = [
-            DevPicture(id: "0"), DevPicture(id: "1"), DevPicture(id: "2"),
-            DevPicture(id: "3"), DevPicture(id: "4"), DevPicture(id: "5"),
-            DevPicture(id: "6"), DevPicture(id: "7"), DevPicture(id: "8"),
-        ]
-        
         thisgame = game(players: players, pictures: pictures, moves: moves)!.shareReplay()
         
         thisgame.observe { event in
@@ -45,49 +35,49 @@ class PlayCoordinator: NSObject, Coordinator{
     func start(withCallback completion: CoordinatorCallback?) {
         
         // Create a Signal of the current Player, and pass it to the GameHost:
-        let currentPlayer: Signal<RealPlayer, NoError> = thisgame.map { (gameState) -> RealPlayer? in
-            guard case let .readyForTurn(_, player, _) = gameState else {return nil}
-            return player
-        }.suppressError(logging: false)
-        .ignoreNil()
+        let currentPlayer: Signal<RealPlayer, NoError> = thisgame
+            .map { (gameState) -> RealPlayer? in
+                guard case let .readyForTurn(_, player, _) = gameState else {return nil}
+                return player
+            }.suppressError(logging: false)
+            .ignoreNil()
         
-        let gameHost = GameHostViewController.create { (host) -> GameHostViewModel in
+        let gameHostViewController = GameHostViewController.create { (host) -> GameHostViewModel in
             return GameHostViewModel(currentPlayer: currentPlayer)
         }
         
-        presenter.present(gameHost, animated: false) {
-            self.thisgame.observe { [weak self] (event: Event<GameState<RealPlayer>, String>) in
-                guard let strongSelf = self else {return}
-                
-                switch event {
-                case .next(let gameState):
-                    guard let board = gameState.board, let player = gameState.player else {break}
-                    
-                    let turnViewController = TurnViewController.create { (viewController) -> TurnViewModel<RealPlayer, DevPicture> in
-                        let viewModel = TurnViewModel<RealPlayer, DevPicture>(
-                            actions: viewController.actions, board: board, player: player, scoreboard: gameState.score)
-                        
-                        // pass user moves out to the Game
-                        viewModel.resultOfUserTurn
-                            .bind(to: strongSelf.moves)
-                            .dispose(in: viewController.reactive.bag)
-                        
-                        return viewModel
-                    }
-                    
-                    gameHost.turnViewController = turnViewController
-                    
-                case .failed(let error):
-                    print("error: \(error)")
-                    
-                case .completed:
-                    break;
-                }
-            }.dispose(in: self.bag)
+        self.thisgame.observe { [weak self] (event: Event<GameState<RealPlayer>, String>) in
+            guard let strongSelf = self else {return}
             
-            // Ready:
-            completion?(self)
-        }
+            switch event {
+            case .next(let gameState):
+                guard let board = gameState.board, let player = gameState.player else {break}
+                
+                let turnViewController = TurnViewController.create { (viewController) -> TurnViewModel<RealPlayer, DevPicture> in
+                    let viewModel = TurnViewModel<RealPlayer, DevPicture>(
+                        actions: viewController.actions, board: board, player: player, scoreboard: gameState.score)
+                    
+                    // pass user moves out to the Game
+                    viewModel.resultOfUserTurn
+                        .bind(to: strongSelf.moves)
+                        .dispose(in: viewController.reactive.bag)
+                    
+                    return viewModel
+                }
+                
+                gameHostViewController.turnViewController = turnViewController
+                
+            case .failed(let error):
+                print("error: \(error)")
+                
+            case .completed:
+                break;
+            }
+        }.dispose(in: self.bag)
+        
+        // Ready:
+        presenter.viewControllers = [gameHostViewController]
+        completion?(self)
     }
     
     /// Tells the coordinator that it is done and that it should rewind the view controller state to where it was before `start` was called.
@@ -106,7 +96,7 @@ class GameHostViewModel{
     private let currentPlayer: Signal<RealPlayer, NoError>
     init(currentPlayer: Signal<RealPlayer, NoError>){
         self.currentPlayer = currentPlayer
-        playerName = currentPlayer.map {$0.name}
+        playerName = currentPlayer.map {"It is \($0.name)'s turn!!"}
     }
 }
 
@@ -140,21 +130,35 @@ class GameHostViewController: BaseBoundViewController<GameHostViewModel> {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.yellow
-        
-        bind(viewModel.playerName, to: playerName.reactive.text)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        turnViewController?.view.frame = gameFrame.frame
+    }
+    
+    override func bindTo(viewModel: GameHostViewModel) {
+        viewModel.playerName.observeNext { [weak self] (title) in
+            guard let strongSelf = self else {return}
+            strongSelf.playerName.text = title
+        }.dispose(in: reactive.bag)
     }
 }
 
 
 class TurnViewModel<Player: PlayerType, Picture: PictureType> {
-    private let board: Board
-    private let player: Player
-    private let scoreboard: Scoreboard<Player>
+    let RevealAnimationDuration: TimeInterval = 1.0
     
     let actions: TurnViewController.Actions
     
     let resultOfUserTurn = PublishSubject1<Move<Picture>>()
+
+    // After two turns, no more tapping allowed
+    let disableUserInteraction: SafeSignal<Void>
     
+    private let board: Board
+    private let player: Player
+    private let scoreboard: Scoreboard<Player>
     private let bag = DisposeBag()
     
     init(actions: TurnViewController.Actions, board: Board, player: Player, scoreboard: Scoreboard<Player>){
@@ -172,11 +176,14 @@ class TurnViewModel<Player: PlayerType, Picture: PictureType> {
         let firstTile = tileTaps.element(at: 0)
         let secondTile = tileTaps.element(at: 1)
         
+        disableUserInteraction = combineLatest(firstTile, secondTile).map {_,_ in ()}
+        
         // Combine the signals from user's first and second choice,
         // and map to .success or .failure
         // then bind the result to the ViewModel output `resultOfUserTurn`:
         combineLatest(firstTile, secondTile)
             .mapTileCombinationToMoveResult()
+            .delay(interval: RevealAnimationDuration, on: DispatchQueue.main)
             .bind(to: self.resultOfUserTurn)
     }
     
@@ -185,42 +192,11 @@ class TurnViewModel<Player: PlayerType, Picture: PictureType> {
         return count
     }
     
-    func backgroundColor(cellID: Int) -> UIColor{
+    func image(cellID:Int) -> UIImage? {
         let tile = self.board.tiles[cellID]
-        guard case let .filled(picture) = tile else {
-            return .clear
-        }
+        guard case let .filled(picture) = tile else { return nil }
         
-        switch picture.id {
-            case "0": fallthrough
-            case "9": return UIColor.black
-                
-            case "1": fallthrough
-            case "10": return UIColor.blue
-                
-            case "2": fallthrough
-            case "11": return UIColor.yellow
-            
-            case "3": fallthrough
-            case "12": return UIColor.green
-            
-            case "4": fallthrough
-            case "13": return UIColor.red
-
-            case "5": fallthrough
-            case "14": return UIColor.orange
-
-            case "6": fallthrough
-            case "15": return UIColor.gray
-
-            case "7": fallthrough
-            case "16": return UIColor.lightGray
-
-            case "8": fallthrough
-            case "17": return UIColor.cyan
-            
-            default: fatalError()
-        }
+        return picture.loadedImage
     }
 }
 
@@ -254,13 +230,56 @@ class TurnViewController: BaseBoundViewController<TurnViewModel<RealPlayer, DevP
     @IBOutlet var collectionView: UICollectionView!{
         didSet{
             collectionView?.dataSource = self
+            collectionView?.reactive.delegate.forwardTo = self
         }
     }
+    
+    var layout: UICollectionViewFlowLayout = {
+        let layout = UICollectionViewFlowLayout()
+        //
+        return layout
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor.purple
+       
+        // TODO: more sophisticated way of calculating cell size:
+        if viewModel.cellCount == DifficultyLevel.easy.rawValue * 2{
+            if UIDevice.current.userInterfaceIdiom == .pad{
+                layout.itemSize = CGSize(width: 160, height: 160)
+            }
+            else{
+                layout.itemSize = CGSize(width: 80, height: 80)
+            }
+        }
+        else{
+            if UIDevice.current.userInterfaceIdiom == .pad{
+                layout.itemSize = CGSize(width: 120, height: 120)
+            }
+            else{
+                layout.itemSize = CGSize(width: 60, height: 60)
+            }
+        }
+        layout.minimumInteritemSpacing = 5
+        layout.minimumLineSpacing = 5
+        collectionView?.collectionViewLayout = layout
+    }
+    
+    override func bindTo(viewModel: TurnViewModel<RealPlayer, DevPicture>) {
+        viewModel.disableUserInteraction.observeNext { [weak self] in
+            self?.collectionView.isUserInteractionEnabled = false
+        }.dispose(in: reactive.bag)
+    }
+    
+    // MARK: UICollectionViewDelegate:
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TileCell else {return}
         
+        UIView.animate(withDuration: viewModel.RevealAnimationDuration / 2) {
+            cell.transform = cell.transform.scaledBy(x: 1.2, y: 1.2)
+            cell.revealed = true
+        }
     }
     
     
@@ -271,8 +290,14 @@ class TurnViewController: BaseBoundViewController<TurnViewModel<RealPlayer, DevP
     }
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell{
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DevCell", for: indexPath)
-        cell.backgroundColor = viewModel.backgroundColor(cellID: indexPath.row)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TileCell", for: indexPath) as! TileCell
+        
+        if let picture = viewModel.image(cellID: indexPath.row){
+            cell.pictureImageView.image = picture
+        }
+        else{
+            cell.isHidden = true
+        }
         return cell
     }
     
