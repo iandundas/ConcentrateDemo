@@ -10,7 +10,7 @@ import UIKit
 import ReactiveKit
 
 enum DifficultyLevel: Int{
-    case easy = 1
+    case easy = 8
     case hard = 14
 }
 
