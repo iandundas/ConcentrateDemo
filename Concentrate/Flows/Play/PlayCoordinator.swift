@@ -79,21 +79,9 @@ class PlayCoordinator: NSObject, Coordinator{
         }.dispose(in: self.bag)
         
         
-        // When the game is completed:
-        thisgame.observeCompleted { [weak self] in
-            guard let strongSelf = self else {return}
-            
-            let winnerViewController = WinnerViewController.create { (vc) -> WinnerViewModel in
-                return WinnerViewModel(playerName: strongSelf.currentPlayer.value?.name ?? "")
-            }
-            winnerViewController.actions.tappedToClose.bind(to: strongSelf.shouldDismissCoordinator)
-            
-            strongSelf.presenter.pushViewController(winnerViewController, animated: false)
-        }.dispose(in: self.bag)
-        
-        
         // The last state of the game (.ended), we want to save the scores from:
-        thisgame.last().observeNext { (lastGameState) in
+        thisgame.last().observeNext { [weak self] (lastGameState) in
+            guard let strongSelf = self else {return}
             guard case .ended(let scoreboard) = lastGameState else {return}
             
             let winner = scoreboard.scores.sorted(by: { (a: (key: RealPlayer, value: Int), b:(key: RealPlayer, value: Int)) -> Bool in
@@ -105,6 +93,8 @@ class PlayCoordinator: NSObject, Coordinator{
                 try! realm.write {
                     realm.add(Score(value: ["playerName": winner.key.name, "score": winner.value]))
                 }
+                
+                strongSelf.pushWinner(winner: winner.key)
             }
             
         }.dispose(in: self.bag)
@@ -120,6 +110,15 @@ class PlayCoordinator: NSObject, Coordinator{
         presenter.dismiss(animated: true){
             completion?(self)
         }
+    }
+    
+    func pushWinner(winner: RealPlayer){
+        let winnerViewController = WinnerViewController.create { (vc) -> WinnerViewModel in
+            return WinnerViewModel(playerName: winner.name)
+        }
+        winnerViewController.actions.tappedToClose.bind(to: shouldDismissCoordinator)
+        
+        presenter.pushViewController(winnerViewController, animated: false)
     }
     
 }

@@ -21,6 +21,8 @@ class TurnViewModel<Player: PlayerType, Picture: PictureType> {
     // After two turns, no more tapping allowed
     let disableUserInteraction: SafeSignal<Void>
     
+    let scores: SafeSignal<String>
+    
     private let board: Board
     private let player: Player
     private let scoreboard: Scoreboard<Player>
@@ -50,6 +52,14 @@ class TurnViewModel<Player: PlayerType, Picture: PictureType> {
             .mapTileCombinationToMoveResult()
             .delay(interval: RevealAnimationDuration, on: DispatchQueue.main)
             .bind(to: self.resultOfUserTurn)
+        
+        
+        let scorePairs = scoreboard.scores.map { (player: (key: Player, value: Int)) -> String in
+            return "\(player.key.name): \(player.value)"
+        }
+        
+        let scoreString = (scorePairs as NSArray).componentsJoined(by: ", ")
+        scores = Signal.just(scoreString)
     }
     
     var cellCount: Int {
@@ -80,6 +90,7 @@ class TurnViewController: BaseBoundViewController<TurnViewModel<RealPlayer, DevP
             collectionView?.reactive.delegate.forwardTo = self
         }
     }
+    @IBOutlet var scores: UILabel!
     
     var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
@@ -116,6 +127,8 @@ class TurnViewController: BaseBoundViewController<TurnViewModel<RealPlayer, DevP
         viewModel.disableUserInteraction.observeNext { [weak self] in
             self?.collectionView.isUserInteractionEnabled = false
             }.dispose(in: reactive.bag)
+        
+        bind(viewModel.scores, to: scores.reactive.text)
     }
     
     // MARK: UICollectionViewDelegate:

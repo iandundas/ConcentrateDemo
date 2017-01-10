@@ -177,10 +177,5 @@ class MainCoordinator: NSObject, Coordinator{
                 }.dispose(in: self.bag)
             })
         }
-
-        
-        
-        
     }
-    
 }
