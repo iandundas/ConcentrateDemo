@@ -30,6 +30,14 @@
 		3CA39EAF1E22AD1100428C38 /* Turn.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CA39EAE1E22AD1100428C38 /* Turn.storyboard */; };
 		3CA39EB11E22AD1C00428C38 /* GameHost.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CA39EB01E22AD1C00428C38 /* GameHost.storyboard */; };
 		3CA39EC91E23ED1900428C38 /* Networking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA39EC81E23ED1900428C38 /* Networking.swift */; };
+		3CA39ECC1E24185800428C38 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA39ECB1E24185800428C38 /* MainCoordinator.swift */; };
+		3CA39ECE1E24198400428C38 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA39ECD1E24198400428C38 /* CollectionView.swift */; };
+		3CA39ED01E2419C900428C38 /* SelectPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA39ECF1E2419C900428C38 /* SelectPlayerViewController.swift */; };
+		3CA39ED21E2419D600428C38 /* SelectPlayer.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CA39ED11E2419D600428C38 /* SelectPlayer.storyboard */; };
+		3CA39ED51E241C2800428C38 /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA39ED41E241C2800428C38 /* TableView.swift */; };
+		3CA39ED71E243F7100428C38 /* LoadingAssetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA39ED61E243F7100428C38 /* LoadingAssetsViewController.swift */; };
+		3CA39EDA1E243F9600428C38 /* LoadingAssets.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3CA39ED91E243F9600428C38 /* LoadingAssets.storyboard */; };
+		3CA39EDC1E24655B00428C38 /* TileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA39EDB1E24655B00428C38 /* TileCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -91,6 +99,14 @@
 		3CA39EAE1E22AD1100428C38 /* Turn.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Turn.storyboard; path = Flows/Play/Turn.storyboard; sourceTree = "<group>"; };
 		3CA39EB01E22AD1C00428C38 /* GameHost.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = GameHost.storyboard; sourceTree = "<group>"; };
 		3CA39EC81E23ED1900428C38 /* Networking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Networking.swift; sourceTree = "<group>"; };
+		3CA39ECB1E24185800428C38 /* MainCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainCoordinator.swift; path = Coordinator/MainCoordinator.swift; sourceTree = "<group>"; };
+		3CA39ECD1E24198400428C38 /* CollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
+		3CA39ECF1E2419C900428C38 /* SelectPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectPlayerViewController.swift; sourceTree = "<group>"; };
+		3CA39ED11E2419D600428C38 /* SelectPlayer.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = SelectPlayer.storyboard; sourceTree = "<group>"; };
+		3CA39ED41E241C2800428C38 /* TableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
+		3CA39ED61E243F7100428C38 /* LoadingAssetsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingAssetsViewController.swift; sourceTree = "<group>"; };
+		3CA39ED91E243F9600428C38 /* LoadingAssets.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LoadingAssets.storyboard; sourceTree = "<group>"; };
+		3CA39EDB1E24655B00428C38 /* TileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TileCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +163,7 @@
 			isa = PBXGroup;
 			children = (
 				3CA39EC81E23ED1900428C38 /* Networking.swift */,
+				3C5413811E21995A00EA86B0 /* Coordinator.swift */,
 				3CA39EC61E23EADA00428C38 /* Extras */,
 				3CA39EAA1E225EB300428C38 /* Flows */,
 				3C5413801E21994700EA86B0 /* Coordinators */,
@@ -190,6 +207,8 @@
 				3C54135F1E1FCC8800EA86B0 /* Numbers.swift */,
 				3C5413611E1FCCB300EA86B0 /* Colours.swift */,
 				3C5413631E1FCD3900EA86B0 /* Images.swift */,
+				3CA39ECD1E24198400428C38 /* CollectionView.swift */,
+				3CA39ED41E241C2800428C38 /* TableView.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -208,8 +227,6 @@
 		3C5413801E21994700EA86B0 /* Coordinators */ = {
 			isa = PBXGroup;
 			children = (
-				3C5413811E21995A00EA86B0 /* Coordinator.swift */,
-				3C5413831E21999700EA86B0 /* ApplicationCoordinator.swift */,
 			);
 			name = Coordinators;
 			sourceTree = "<group>";
@@ -217,8 +234,9 @@
 		3CA39EAA1E225EB300428C38 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
+				3C5413831E21999700EA86B0 /* ApplicationCoordinator.swift */,
+				3CA39ECA1E24177600428C38 /* Main */,
 				3CA39EAB1E225EBB00428C38 /* Play */,
-				3CA39EA81E225EA600428C38 /* BaseBoundViewController.swift */,
 			);
 			name = Flows;
 			sourceTree = "<group>";
@@ -227,8 +245,8 @@
 			isa = PBXGroup;
 			children = (
 				3C5413851E219AF500EA86B0 /* PlayCoordinator.swift */,
-				3CA39EAE1E22AD1100428C38 /* Turn.storyboard */,
-				3CA39EB01E22AD1C00428C38 /* GameHost.storyboard */,
+				3CA39EDE1E24677F00428C38 /* Host */,
+				3CA39EDD1E24677000428C38 /* Turn */,
 			);
 			name = Play;
 			sourceTree = "<group>";
@@ -238,10 +256,56 @@
 			children = (
 				3C54132C1E1FC31900EA86B0 /* AppDelegate.swift */,
 				3C5413331E1FC31900EA86B0 /* Assets.xcassets */,
-				3C5413351E1FC31900EA86B0 /* LaunchScreen.storyboard */,
+				3CA39EA81E225EA600428C38 /* BaseBoundViewController.swift */,
 				3C5413381E1FC31900EA86B0 /* Info.plist */,
+				3C5413351E1FC31900EA86B0 /* LaunchScreen.storyboard */,
 			);
 			name = Extras;
+			sourceTree = "<group>";
+		};
+		3CA39ECA1E24177600428C38 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				3CA39ED81E243F7400428C38 /* LoadingAssets */,
+				3CA39ED31E241A8F00428C38 /* Select Player */,
+				3CA39ECB1E24185800428C38 /* MainCoordinator.swift */,
+			);
+			name = Main;
+			sourceTree = "<group>";
+		};
+		3CA39ED31E241A8F00428C38 /* Select Player */ = {
+			isa = PBXGroup;
+			children = (
+				3CA39ECF1E2419C900428C38 /* SelectPlayerViewController.swift */,
+				3CA39ED11E2419D600428C38 /* SelectPlayer.storyboard */,
+			);
+			name = "Select Player";
+			sourceTree = "<group>";
+		};
+		3CA39ED81E243F7400428C38 /* LoadingAssets */ = {
+			isa = PBXGroup;
+			children = (
+				3CA39ED61E243F7100428C38 /* LoadingAssetsViewController.swift */,
+				3CA39ED91E243F9600428C38 /* LoadingAssets.storyboard */,
+			);
+			name = LoadingAssets;
+			sourceTree = "<group>";
+		};
+		3CA39EDD1E24677000428C38 /* Turn */ = {
+			isa = PBXGroup;
+			children = (
+				3CA39EAE1E22AD1100428C38 /* Turn.storyboard */,
+				3CA39EDB1E24655B00428C38 /* TileCell.swift */,
+			);
+			name = Turn;
+			sourceTree = "<group>";
+		};
+		3CA39EDE1E24677F00428C38 /* Host */ = {
+			isa = PBXGroup;
+			children = (
+				3CA39EB01E22AD1C00428C38 /* GameHost.storyboard */,
+			);
+			name = Host;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -360,6 +424,8 @@
 				3C5413371E1FC31900EA86B0 /* LaunchScreen.storyboard in Resources */,
 				3C5413341E1FC31900EA86B0 /* Assets.xcassets in Resources */,
 				3CA39EAF1E22AD1100428C38 /* Turn.storyboard in Resources */,
+				3CA39ED21E2419D600428C38 /* SelectPlayer.storyboard in Resources */,
+				3CA39EDA1E243F9600428C38 /* LoadingAssets.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -407,9 +473,15 @@
 			files = (
 				3CA39EA91E225EA600428C38 /* BaseBoundViewController.swift in Sources */,
 				3CA39EC91E23ED1900428C38 /* Networking.swift in Sources */,
+				3CA39ED01E2419C900428C38 /* SelectPlayerViewController.swift in Sources */,
+				3CA39ED51E241C2800428C38 /* TableView.swift in Sources */,
+				3CA39ED71E243F7100428C38 /* LoadingAssetsViewController.swift in Sources */,
 				3C5413601E1FCC8800EA86B0 /* Numbers.swift in Sources */,
 				3C5413641E1FCD3900EA86B0 /* Images.swift in Sources */,
+				3CA39EDC1E24655B00428C38 /* TileCell.swift in Sources */,
 				3C5413621E1FCCB300EA86B0 /* Colours.swift in Sources */,
+				3CA39ECC1E24185800428C38 /* MainCoordinator.swift in Sources */,
+				3CA39ECE1E24198400428C38 /* CollectionView.swift in Sources */,
 				3C5413861E219AF500EA86B0 /* PlayCoordinator.swift in Sources */,
 				3C54135C1E1FC8C700EA86B0 /* Game.swift in Sources */,
 				3C54132D1E1FC31900EA86B0 /* AppDelegate.swift in Sources */,

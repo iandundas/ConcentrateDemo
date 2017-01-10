@@ -7,18 +7,16 @@
 //
 
 import UIKit
+import ReactiveKit
 
 class ApplicationCoordinator: NSObject, Coordinator{
     
     // MARK: Coordinator
     var identifier = "Application"
-    let presenter = UIViewController()
+    let presenter = UINavigationController()
     var childCoordinators: [String: Coordinator] = [:]
     
     let window: UIWindow
-//    let realm = try! Realm()
-//    private let bag = DisposeBag()
-    
     init(window: UIWindow){
         self.window = window
     }
@@ -28,9 +26,11 @@ class ApplicationCoordinator: NSObject, Coordinator{
         window.rootViewController = presenter
         window.makeKeyAndVisible()
         
-        let play = PlayCoordinator(presenter: presenter)
-        _ = startChild(coordinator: play) { (playCoordinator) in
-            //
+        DispatchQueue.main.async {
+            let mainFlow = MainCoordinator(presenter: self.presenter)
+            _ = self.startChild(coordinator: mainFlow) { (mainFlow) in
+                //
+            }
         }
     }
     
