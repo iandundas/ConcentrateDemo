@@ -129,7 +129,7 @@ class GameHostViewController: BaseBoundViewController<GameHostViewModel> {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.yellow
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -242,8 +242,7 @@ class TurnViewController: BaseBoundViewController<TurnViewModel<RealPlayer, DevP
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.purple
-       
+        
         // TODO: more sophisticated way of calculating cell size:
         if viewModel.cellCount == DifficultyLevel.easy.rawValue * 2{
             if UIDevice.current.userInterfaceIdiom == .pad{
