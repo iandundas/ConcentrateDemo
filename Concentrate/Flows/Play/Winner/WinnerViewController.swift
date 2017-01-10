@@ -11,16 +11,17 @@ import ReactiveKit
 import Bond
 import SpriteKit
 
-class WinnerViewModel{
+class WinnerViewModel<Player: PlayerType>{
     let playerName: String
     
-    init(playerName: String){
-        self.playerName = playerName
+    init(players: [Player]){
+        let names = players.map {$0.name}
+        self.playerName = (names as NSArray).componentsJoined(by: " ")
     }
 }
 
-class WinnerViewController: BaseBoundViewController<WinnerViewModel> {
-    public static func create(viewModelFactory: @escaping (WinnerViewController) -> WinnerViewModel) -> WinnerViewController{
+class WinnerViewController: BaseBoundViewController<WinnerViewModel<RealPlayer>> {
+    public static func create(viewModelFactory: @escaping (WinnerViewController) -> WinnerViewModel<RealPlayer>) -> WinnerViewController{
         return create(storyboard: UIStoryboard(name: "Winner", bundle: Bundle.main), viewModelFactory: downcast(closure: viewModelFactory)) as! WinnerViewController
     }
     
